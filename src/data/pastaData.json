@@ -1,0 +1,20 @@
+{
+    "short": [
+      { "name": "Conchiglie Rigate", "alDente": 10, "wellDone": 12, "image": "/src/assets/images/IMG_0066.JPG" },
+      { "name": "Farfalle", "alDente": 9, "wellDone": 11, "image": "/src/assets/images/farfalle.JPG"  },
+      { "name": "Fusilli", "alDente": 8, "wellDone": 10, "image": "/src/assets/images/farfalle.JPG"  },
+      { "name": "Macaroni", "alDente": 7, "wellDone": 9, "image": "/src/assets/images/farfalle.JPG"  }
+    ],
+    "long": [
+      { "name": "Spaghetti", "alDente": 8, "wellDone": 10, "image": "/src/assets/images/farfalle.JPG"  },
+      { "name": "Linguine", "alDente": 9, "wellDone": 11, "image": "/src/assets/images/farfalle.JPG"  },
+      { "name": "Tagliatelle", "alDente": 7, "wellDone": 9, "image": "/src/assets/images/farfalle.JPG"  },
+      { "name": "Fettuccine", "alDente": 9, "wellDone": 11, "image": "/src/assets/images/farfalle.JPG"  }
+    ],
+    "special": [
+      { "name": "Ravioli", "alDente": 3, "wellDone": 5, "image": "/src/assets/images/farfalle.JPG"  },
+      { "name": "Gnocchi", "alDente": 2, "wellDone": 3, "image": "/src/assets/images/farfalle.JPG"  },
+      { "name": "Pappardelle", "alDente": 6, "wellDone": 8, "image": "/src/assets/images/farfalle.JPG"  }
+    ]
+  }
+  
