@@ -79,14 +79,16 @@ const App = () => {
   }, [timeLeft]);
   
   return (
-    <div className="pasta-timer-all">
+    <div className="pasta-timer">
       <div className="main-container">
         <div className="container">
-          <div className="choix-categorie container-first">
-            <div className="container-titre">
+
+          {/* STEP ONE */}
+          <div className="step-one">
+            <div className="step-one-title">
               <p>STEP 1</p>
               <h1>Choose your pasta category 👇</h1>
-              <div className="buttons">
+              <div className="buttons-general">
                 {Object.keys(pastaData).map((cat) => (
                   <button key={cat} onClick={() => setCategory(cat)}>
                     {cat}
@@ -94,21 +96,21 @@ const App = () => {
                 ))}
               </div>
             </div>
-            <div className="main-illustration">
+            <div className="step-one-illustration">
               <img src="/src/assets/images/farfalle.JPG" alt="Pasta Illustration"></img>
             </div>
           </div>
 
-          <div className="container-pasta">
-            
-
+          {/* STEP TWO AND THREE */}
+          <div>
             {category && (
-              <div className="second-container">
-                <div className="choix-pasta">
+              <div className="steps-two-three">
+                {/* STEP TWO */}
+                <div className="step-two-title">
                   <h2>Choose your type</h2>
                   <p>STEP 2</p>
                 </div>
-                <div className="pasta-illustration">
+                <div className="cards-slider">
                   <div className="slider">
                     <div className="slides">
                       {pastaData[category].map((pasta) => (
@@ -135,12 +137,14 @@ const App = () => {
                   </div>
                 </div>
                 {selectedPasta && (
-                  <div className="cooking-options">
-                    <div className="choix-pasta-time">
+                  <div>
+                    {/* STEP TWO AND THREE */}
+                    <div className="step-three-title">
                       <h2>How do you prefer it?</h2>
                       <p>STEP 3</p>
                     </div>
-                    <div className="buttons buttons-cuisson">
+                    {/* COOKING BUTTONS */}
+                    <div className="buttons-general buttons-cooking">
                       <button onClick={() => startCooking(selectedPasta.alDente)}>
                         <span className="svg-wrapper">
                           <svg
@@ -179,8 +183,10 @@ const App = () => {
                     </div>
                   </div>
                 )}
+
+                {/* RECIPES CONTAINER  */}
                 {showRecipe && selectedPasta && (
-                  <div className="recipe-container">
+                  <div className="recipes-container">
                     <div
                       className="recipe-card"
                       style={{ backgroundImage: `url(${selectedPasta.image})` }}
@@ -192,7 +198,9 @@ const App = () => {
               </div>
             )}
           </div>
-          {/* MODAL de cuisson */}
+
+
+          {/* MODAL */}
           <div
             className="container-modal"
             onMouseMove={handleMouseMove}
@@ -201,39 +209,35 @@ const App = () => {
           >
             {showModal && (
               <>
-                {/* Fond sombre avec effet de flou */}
                 <div
                   className={`modal-overlay ${isMinimized ? 'minimized' : ''}`}
                   onClick={() => setShowModal(false)}
                 ></div>
               
-                  {/* Affichage du timer ou de la fin de cuisson */}
                   {timeLeft > 0 ? (
                     <div
                     className={`modal ${isMinimized ? 'minimized' : ''}`}
                     style={{
                       top: `${modalPosition.y}px`,
                       left: `${modalPosition.x}px`,
-                      position: 'absolute', // Position absolue pour déplacer la modal
+                      position: 'absolute', 
                     }}
-                    onMouseDown={handleMouseDown} // Commencer le glissement lors du clic
+                    onMouseDown={handleMouseDown} 
                     >
-                      <div className="buttons-zoom-dezoom">
+
+                      {/* BUTTONS EXOAND AND MINIMIZE */}
+                      <div className="buttons-expand-minimize">
                         {isMinimized ? (
-                          <div className="div-box-og " onClick={toggleMinimized}>
-                            <div className="btn-box button-elem" onClick={toggleMinimized}>
-                              <svg className="button-elemm" onClick={toggleMinimized} fill="#00a3d7" height="40px" width="40px" version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 299.995 299.995">
-                                <path d="M139.415,96.195c-22.673,0-41.056,18.389-41.056,41.062c0,22.676,18.383,41.059,41.056,41.059 c7.446,0,14.41-2.01,20.43-5.478c2.625-1.511,5.06-3.308,7.275-5.342c0.08-0.073,0.163-0.145,0.241-0.218 c0.705-0.659,1.393-1.343,2.052-2.049c0.036-0.039,0.07-0.078,0.106-0.117c2.754-2.977,5.073-6.367,6.86-10.068 c2.596-5.387,4.095-11.404,4.095-17.787C180.474,114.584,162.093,96.195,139.415,96.195z M159.256,146.973h-39.684 c-4.298,0-7.781-3.483-7.781-7.781c0-4.298,3.483-7.781,7.781-7.781h39.684c4.298,0,7.781,3.483,7.781,7.781 C167.037,143.49,163.554,146.973,159.256,146.973z"></path>
-                              </svg>
-                            </div>
+                          <div className="div-expand-minimize" onClick={toggleMinimized}>
+                            <svg className="button-expand-minimize" onClick={toggleMinimized} fill="#00a3d7" height="40px" width="40px" version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 299.995 299.995">
+                              <path d="M139.415,96.195c-22.673,0-41.056,18.389-41.056,41.062c0,22.676,18.383,41.059,41.056,41.059 c7.446,0,14.41-2.01,20.43-5.478c2.625-1.511,5.06-3.308,7.275-5.342c0.08-0.073,0.163-0.145,0.241-0.218 c0.705-0.659,1.393-1.343,2.052-2.049c0.036-0.039,0.07-0.078,0.106-0.117c2.754-2.977,5.073-6.367,6.86-10.068 c2.596-5.387,4.095-11.404,4.095-17.787C180.474,114.584,162.093,96.195,139.415,96.195z M159.256,146.973h-39.684 c-4.298,0-7.781-3.483-7.781-7.781c0-4.298,3.483-7.781,7.781-7.781h39.684c4.298,0,7.781,3.483,7.781,7.781 C167.037,143.49,163.554,146.973,159.256,146.973z"></path>
+                            </svg>
                           </div>
                         ) : (
-                          <div className="div-box-og" onClick={toggleMinimized}>
-                            <div className="btn-box button-elem" onClick={toggleMinimized}>
-                              <svg className="button-elemm"  onClick={toggleMinimized} fill="#00a3d7" height="40px" width="40px" version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 299.998 299.998">
-                                <path d="M139.414,96.193c-22.673,0-41.056,18.389-41.056,41.062c0,22.678,18.383,41.062,41.056,41.062 c22.678,0,41.059-18.383,41.059-41.062C180.474,114.582,162.094,96.193,139.414,96.193z M159.255,146.971h-12.06v12.06 c0,4.298-3.483,7.781-7.781,7.781c-4.298,0-7.781-3.483-7.781-7.781v-12.06h-12.06c-4.298,0-7.781-3.483-7.781-7.781 c0-4.298,3.483-7.781,7.781-7.781h12.06v-12.063c0-4.298,3.483-7.781,7.781-7.781c4.298,0,7.781,3.483,7.781,7.781v12.063h12.06 c4.298,0,7.781,3.483,7.781,7.781C167.036,143.488,163.555,146.971,159.255,146.971z"></path>
-                              </svg>
-                            </div>
+                          <div className="div-expand-minimize" onClick={toggleMinimized}>
+                            <svg className="button-expand-minimize"  onClick={toggleMinimized} fill="#00a3d7" height="40px" width="40px" version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 299.998 299.998">
+                              <path d="M139.414,96.193c-22.673,0-41.056,18.389-41.056,41.062c0,22.678,18.383,41.062,41.056,41.062 c22.678,0,41.059-18.383,41.059-41.062C180.474,114.582,162.094,96.193,139.414,96.193z M159.255,146.971h-12.06v12.06 c0,4.298-3.483,7.781-7.781,7.781c-4.298,0-7.781-3.483-7.781-7.781v-12.06h-12.06c-4.298,0-7.781-3.483-7.781-7.781 c0-4.298,3.483-7.781,7.781-7.781h12.06v-12.063c0-4.298,3.483-7.781,7.781-7.781c4.298,0,7.781,3.483,7.781,7.781v12.063h12.06 c4.298,0,7.781,3.483,7.781,7.781C167.036,143.488,163.555,146.971,159.255,146.971z"></path>
+                            </svg>
                           </div>
                         )}
                       </div>
@@ -246,8 +250,8 @@ const App = () => {
                       </div>
 
                       {!isMinimized ? (
-                        <div className='texte-modal'>
-                          <h2>Cuisson en cours...</h2>
+                        <div className='modal-text'>
+                          <h2>Currently cooking...</h2>
                         </div>
                       ) : (
                         <p></p>
@@ -257,7 +261,7 @@ const App = () => {
                     </div>
 
                   ) : (
-
+                    // MODAL-FNISHED
                     <div 
                     className={`modal-finished ${isMinimized ? 'finished-minimized' : ''}`}
                     style={{
@@ -268,13 +272,7 @@ const App = () => {
                     onMouseDown={handleMouseDown}
                     onClick={() => setShowModal(false)}
                     >
-                      {/* Message et effet de cœurs quand la cuisson est terminée */}
                       <h2 className="hearts">ENJOY ❤️</h2>
-                      {/* {!isMinimized && (
-                        <div className="hearts">
-                          ❤️❤️❤️❤️❤️
-                        </div>
-                      )} */}
                     </div>
                   )}
                   {console.log(timeLeft)}
