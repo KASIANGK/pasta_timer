@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "./App.css";
-import pastaData from "./data/pastaData.json"; // Importation du JSON séparé
+import pastaData from "/src/data/pastaData.json"; 
 
 const App = () => {
   const [category, setCategory] = useState(null);
@@ -8,18 +8,27 @@ const App = () => {
   const [timeLeft, setTimeLeft] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [showRecipe, setShowRecipe] = useState(false);
+  const [hoveredPasta, setHoveredPasta] = useState(null);
+  const [isMinimized, setIsMinimized] = useState(false);
+  const [modalPosition, setModalPosition] = useState({ x: 0, y: 0 });
+  const [isDragging, setIsDragging] = useState(false);
+  const [startPosition, setStartPosition] = useState({ x: 0, y: 0 });
 
-  // Timer pour la cuisson
+
   useEffect(() => {
-    if (timeLeft === null || timeLeft <= 0) {
+    if (timeLeft === null) {
       setShowModal(false);
       return;
     }
-    const timer = setTimeout(() => {
-      setTimeLeft(timeLeft - 1);
-    }, 1000);
-    return () => clearTimeout(timer);
+  
+    if (timeLeft > 0) {
+      const timer = setTimeout(() => {
+        setTimeLeft(timeLeft - 1);
+      }, 1000);
+      return () => clearTimeout(timer);
+    }
   }, [timeLeft]);
+  
 
   // Démarrer la cuisson, ouvrir le modal et afficher la recette
   const startCooking = (time) => {
@@ -28,6 +37,47 @@ const App = () => {
     setShowRecipe(true); // Affichage de la section recette
   };
 
+
+  const toggleMinimized = () => {
+    setIsMinimized(prevState => !prevState);
+  };
+  
+  const handleMouseDown = (e) => {
+    // Lors du début du glissement, enregistrer la position de la souris
+    setStartPosition({
+      x: e.clientX - modalPosition.x,
+      y: e.clientY - modalPosition.y
+    });
+    setIsDragging(true); // Activer l'état de glissement
+  };
+  
+  const handleMouseMove = (e) => {
+    if (isDragging) {
+      // Déplacer la modal avec la souris
+      setModalPosition({
+        x: e.clientX - startPosition.x,
+        y: e.clientY - startPosition.y
+      });
+    }
+  };
+  
+  const handleMouseUp = () => {
+    setIsDragging(false); // Désactiver l'état de glissement lorsque la souris est relâchée
+  };
+  
+  const handleMouseLeave = () => {
+    if (isDragging) {
+      setIsDragging(false); // Désactiver le glissement si la souris quitte la fenêtre
+    }
+  };
+  
+
+  useEffect(() => {
+    if (timeLeft <= 0) {
+      console.log("Modal de fin affichée");
+    }
+  }, [timeLeft]);
+  
   return (
     <div className="pasta-timer-all">
       <div className="main-container">
@@ -50,6 +100,8 @@ const App = () => {
           </div>
 
           <div className="container-pasta">
+            
+
             {category && (
               <div className="second-container">
                 <div className="choix-pasta">
@@ -64,9 +116,19 @@ const App = () => {
                           className={`pasta-card ${selectedPasta?.name === pasta.name ? "selected" : ""}`}
                           key={pasta.name}
                           onClick={() => setSelectedPasta(pasta)}
+                          onMouseEnter={() => setHoveredPasta(pasta.name)}
+                          onMouseLeave={() => setHoveredPasta(null)}
                         >
-                          <img src={pasta.image} alt={pasta.name} className="pasta-image" />
-                          {pasta.name}
+                          <img
+                            src={
+                              hoveredPasta === pasta.name || selectedPasta?.name === pasta.name
+                                ? pasta["image-bis"]
+                                : pasta.image
+                            }
+                            alt={pasta.name}
+                            className="pasta-image"
+                          />
+                          <p>{pasta.name}</p>
                         </div>
                       ))}
                     </div>
@@ -117,7 +179,6 @@ const App = () => {
                     </div>
                   </div>
                 )}
-                {/* RECETTES */}
                 {showRecipe && selectedPasta && (
                   <div className="recipe-container">
                     <div
@@ -131,21 +192,163 @@ const App = () => {
               </div>
             )}
           </div>
-
           {/* MODAL de cuisson */}
-          <div className="container-modal">
+          <div
+            className="container-modal"
+            onMouseMove={handleMouseMove}
+            onMouseUp={handleMouseUp}
+            onMouseLeave={handleMouseLeave}
+          >
             {showModal && (
-              <div className="modal">
-                <div className="timer">
-                  <h1>
-                    {Math.floor(timeLeft / 60)}:
-                    {String(timeLeft % 60).padStart(2, "0")}
-                  </h1>
+              <>
+                {/* Fond sombre avec effet de flou */}
+                <div
+                  className={`modal-overlay ${isMinimized ? 'minimized' : ''}`}
+                  onClick={() => setShowModal(false)}
+                ></div>
+                
+                <div
+                  className={`modal ${isMinimized ? 'minimized' : ''}`}
+                  style={{
+                    top: `${modalPosition.y}px`,
+                    left: `${modalPosition.x}px`,
+                    position: 'absolute', // Position absolue pour déplacer la modal
+                  }}
+                  onMouseDown={handleMouseDown} // Commencer le glissement lors du clic
+                >
+                  {/* Affichage du timer ou de la fin de cuisson */}
+                  {timeLeft > 0 ? (
+                    <>
+                      <div className="buttons-zoom-dezoom">
+                        {isMinimized ? (
+                          <div className="div-box-og " onClick={toggleMinimized}>
+                            <div className="btn-box button-elem" onClick={toggleMinimized}>
+                              <svg className="button-elemm" onClick={toggleMinimized} fill="#00a3d7" height="40px" width="40px" version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 299.995 299.995">
+                                <path d="M139.415,96.195c-22.673,0-41.056,18.389-41.056,41.062c0,22.676,18.383,41.059,41.056,41.059 c7.446,0,14.41-2.01,20.43-5.478c2.625-1.511,5.06-3.308,7.275-5.342c0.08-0.073,0.163-0.145,0.241-0.218 c0.705-0.659,1.393-1.343,2.052-2.049c0.036-0.039,0.07-0.078,0.106-0.117c2.754-2.977,5.073-6.367,6.86-10.068 c2.596-5.387,4.095-11.404,4.095-17.787C180.474,114.584,162.093,96.195,139.415,96.195z M159.256,146.973h-39.684 c-4.298,0-7.781-3.483-7.781-7.781c0-4.298,3.483-7.781,7.781-7.781h39.684c4.298,0,7.781,3.483,7.781,7.781 C167.037,143.49,163.554,146.973,159.256,146.973z"></path>
+                              </svg>
+                            </div>
+                          </div>
+                        ) : (
+                          <div className="div-box-og" onClick={toggleMinimized}>
+                            <div className="btn-box button-elem" onClick={toggleMinimized}>
+                              <svg className="button-elemm"  onClick={toggleMinimized} fill="#00a3d7" height="40px" width="40px" version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 299.998 299.998">
+                                <path d="M139.414,96.193c-22.673,0-41.056,18.389-41.056,41.062c0,22.678,18.383,41.062,41.056,41.062 c22.678,0,41.059-18.383,41.059-41.062C180.474,114.582,162.094,96.193,139.414,96.193z M159.255,146.971h-12.06v12.06 c0,4.298-3.483,7.781-7.781,7.781c-4.298,0-7.781-3.483-7.781-7.781v-12.06h-12.06c-4.298,0-7.781-3.483-7.781-7.781 c0-4.298,3.483-7.781,7.781-7.781h12.06v-12.063c0-4.298,3.483-7.781,7.781-7.781c4.298,0,7.781,3.483,7.781,7.781v12.063h12.06 c4.298,0,7.781,3.483,7.781,7.781C167.036,143.488,163.555,146.971,159.255,146.971z"></path>
+                              </svg>
+                            </div>
+                          </div>
+                        )}
+                      </div>
+
+                      <div className={`timer ${!isMinimized ? 'minimized' : ''}`}>
+                        <h1>
+                          {Math.floor(timeLeft / 60)}:
+                          {String(timeLeft % 60).padStart(2, "0")}
+                        </h1>
+                      </div>
+
+                      {!isMinimized ? (
+                        <div className='texte-modal'>
+                          <h2>Cuisson en cours...</h2>
+                        </div>
+                      ) : (
+                        <p></p>
+                      )}
+
+                      <button onClick={() => setShowModal(false)}>STOP</button>
+                    </>
+                  ) : (
+                    <div className="modal-finished" style={{ display: 'block' }}>
+                      {/* Message et effet de cœurs quand la cuisson est terminée */}
+                      <h2>BUON APPETITOOOOO</h2>
+                      {!isMinimized && (
+                        <div className="hearts">
+                          ❤️❤️❤️❤️❤️❤️❤️❤️❤️
+                        </div>
+                      )}
+                      <button className="button-modal-zoom" onClick={toggleMinimized}>
+                        {isMinimized ? 'Agrandir' : 'Réduire'}
+                      </button>
+                      <button onClick={() => setShowModal(false)}>Fermer</button>
+                    </div>
+                  )}
+
+                  {/* Ajoutons un console.log ici pour vérifier si timeLeft devient 0 */}
+                  {console.log(timeLeft)}
                 </div>
-                <h2>Cuisson en cours...</h2>
-                <button onClick={() => setShowModal(false)}>Annuler</button>
-              </div>
+              </>
             )}
+
+            {/* {showModal && (
+              <>
+                <div
+                  className={`modal-overlay ${isMinimized ? 'minimized' : ''}`}
+                  onClick={() => setShowModal(false)}
+                ></div>
+                <div
+                  className={`modal ${isMinimized ? 'minimized' : ''}`}
+                  style={{
+                    top: `${modalPosition.y}px`,
+                    left: `${modalPosition.x}px`,
+                    position: 'absolute', // Position absolue pour déplacer la modal
+                  }}
+                  onMouseDown={handleMouseDown} // Commencer le glissement lors du clic
+                >
+                  {timeLeft > 0 ? (
+                    <>
+                      <div className="buttons-zoom-dezoom">
+                        {isMinimized ? (
+                          <div className="div-box-og " onClick={toggleMinimized}>
+                            <div className="btn-box button-elem" onClick={toggleMinimized}>
+                              <svg className="button-elemm" onClick={toggleMinimized} fill="#00a3d7" height="40px" width="40px" version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 299.995 299.995">
+                                <path d="M139.415,96.195c-22.673,0-41.056,18.389-41.056,41.062c0,22.676,18.383,41.059,41.056,41.059 c7.446,0,14.41-2.01,20.43-5.478c2.625-1.511,5.06-3.308,7.275-5.342c0.08-0.073,0.163-0.145,0.241-0.218 c0.705-0.659,1.393-1.343,2.052-2.049c0.036-0.039,0.07-0.078,0.106-0.117c2.754-2.977,5.073-6.367,6.86-10.068 c2.596-5.387,4.095-11.404,4.095-17.787C180.474,114.584,162.093,96.195,139.415,96.195z M159.256,146.973h-39.684 c-4.298,0-7.781-3.483-7.781-7.781c0-4.298,3.483-7.781,7.781-7.781h39.684c4.298,0,7.781,3.483,7.781,7.781 C167.037,143.49,163.554,146.973,159.256,146.973z"></path>
+                              </svg>
+                            </div>
+                          </div>
+                        ) : (
+                          <div className="div-box-og"onClick={toggleMinimized}>
+                          <div className="btn-box button-elem" onClick={toggleMinimized}>
+                          <svg className="button-elemm"  onClick={toggleMinimized} fill="#00a3d7" height="40px" width="40px" version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 299.998 299.998">
+                            <path d="M139.414,96.193c-22.673,0-41.056,18.389-41.056,41.062c0,22.678,18.383,41.062,41.056,41.062 c22.678,0,41.059-18.383,41.059-41.062C180.474,114.582,162.094,96.193,139.414,96.193z M159.255,146.971h-12.06v12.06 c0,4.298-3.483,7.781-7.781,7.781c-4.298,0-7.781-3.483-7.781-7.781v-12.06h-12.06c-4.298,0-7.781-3.483-7.781-7.781 c0-4.298,3.483-7.781,7.781-7.781h12.06v-12.063c0-4.298,3.483-7.781,7.781-7.781c4.298,0,7.781,3.483,7.781,7.781v12.063h12.06 c4.298,0,7.781,3.483,7.781,7.781C167.036,143.488,163.555,146.971,159.255,146.971z"></path>
+                          </svg>
+                          </div>
+                          </div>
+                        )}
+                      </div>
+
+                      <div className={`timer ${!isMinimized ? 'minimized' : ''}`}>
+                        <h1>
+                          {Math.floor(timeLeft / 60)}:
+                          {String(timeLeft % 60).padStart(2, "0")}
+                        </h1>
+                        
+                      </div>
+                      {!isMinimized ? (
+                          <div className='texte-modal'>
+                            <h2>Cuisson en cours...</h2>
+                          </div>
+                      ) : (
+                        <p></p>
+                      )
+                      }
+                      <button onClick={() => setShowModal(false)}>STOP</button>
+                    </>
+                  ) : (
+                    <div className="modal-finished">
+                      <h2>BUON APPETITOOOOO</h2>
+                      {!isMinimized && (
+                        <div className="hearts">
+                          ❤️❤️❤️❤️❤️❤️❤️❤️❤️
+                        </div>
+                      )}
+                      <button className="button-modal-zoom" onClick={toggleMinimized}>
+                        {isMinimized ? 'Agrandir' : 'Réduire'}
+                      </button>
+                      <button onClick={() => setShowModal(false)}>Fermer</button>
+                    </div>
+                  )}
+                </div>
+              </>
+            )} */}
           </div>
         </div>
       </div>
@@ -155,502 +358,4 @@ const App = () => {
 
 export default App;
 
-
-
-
-
-// import React, { useState, useEffect } from "react";
-// import "./App.css";
-// import pastaData from "./data/pastaData.json"; // Importation du JSON séparé
-
-// const App = () => {
-//   const [category, setCategory] = useState(null);
-//   const [selectedPasta, setSelectedPasta] = useState(null);
-//   const [timeLeft, setTimeLeft] = useState(null);
-//   const [showModal, setShowModal] = useState(false);
-//   const [showRecipe, setShowRecipe] = useState(false);
-
-
-//   // Timer pour la cuisson
-//   useEffect(() => {
-//     if (timeLeft === null || timeLeft <= 0) {
-//       setShowModal(false);
-//       return;
-//     }
-//     const timer = setTimeout(() => {
-//       setTimeLeft(timeLeft - 1);
-//     }, 1000);
-//     return () => clearTimeout(timer);
-//   }, [timeLeft]);
-
-//   // Démarrer la cuisson et ouvrir le modal
-//   const startCooking = (time) => {
-//     setTimeLeft(time * 60);
-//     setShowModal(true);
-//   };
-
-//   return (
-//     <div className="pasta-timer-all">
-//       <div className="main-container">
-//         {/* <div className="pasta-timer-all-title">
-//           <h1>PASTA TIMEEEEE </h1>
-//         </div> */}
-//         <div className="container">
-//           <div className="choix-categorie container-first">
-//             <div className="container-titre">
-//               <p>STEP 1</p>
-//               <h1>Choose your pasta category 👇</h1>
-//               {/* <img src='/src/assets/images/farfalle.JPG'></img> */}
-//               <div className="buttons">
-//               {Object.keys(pastaData).map((cat) => (
-//                 <button key={cat} onClick={() => setCategory(cat)}>
-//                   {cat}
-//                 </button>
-//               ))}
-//             </div>
-//             </div>
-//             <div className="main-illustration">
-//               <img src="/src/assets/images/farfalle.JPG"></img>
-//             </div>
-//           </div>
-//           <div className="container-pasta">
-//               {category && (
-//                 <>
-//                 <div className="second-container">
-//                   <div className="choix-pasta">
-//                     <h2>Choose your type</h2>
-//                     <p>STEP 2</p>
-//                   </div>
-//                   <div className="pasta-illustration">
-//                     <div className="slider">
-//                       <div className="slides">
-//                       {pastaData[category].map((pasta) => (
-//                         <div
-//                           className={`pasta-card ${selectedPasta?.name === pasta.name ? "selected" : ""}`}
-//                           key={pasta.name}
-//                           onClick={() => setSelectedPasta(pasta)}
-//                         >
-//                           <img src={pasta.image} alt={pasta.name} className="pasta-image" />
-//                           {pasta.name}
-//                         </div>
-
-//                       ))}
-//                       </div>
-//                     </div>
-//                   </div>
-//                   {selectedPasta && (
-//                     <div className="cooking-options">
-//                       <div className="choix-pasta-time">
-//                         <h2>How do u prefer it?</h2>
-//                         <p>STEP 3</p>
-//                       </div>
-//                       <div className="buttons">
-//                         <button onClick={() => startCooking(selectedPasta.alDente)}>Al Dente</button>
-//                         <button onClick={() => startCooking(selectedPasta.wellDone)}>Bien Cuit</button>
-//                       </div>
-//                     </div>
-//                   )}
-//                 </div>
-//                 </>
-//               )}
-//           </div>
-//           <div className="container-modal">
-//             {showModal && (
-//               <div className="modal">
-//                 <h2>Cuisson en cours...</h2>
-//                 <p>Temps restant : {Math.floor(timeLeft / 60)}:{String(timeLeft % 60).padStart(2, '0')}</p>
-//                 <button onClick={() => setShowModal(false)}>Annuler</button>
-//               </div>
-//             )}
-//           </div>
-//         </div>
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default App;
-
-
-
-// import React, { useState, useEffect } from "react";
-// import pastaData from "./data/pastaData.json";
-// import "./App.css";
-
-// const App = () => {
-//   const [category, setCategory] = useState(null);
-//   const [selectedPasta, setSelectedPasta] = useState(null);
-//   const [timeLeft, setTimeLeft] = useState(null);
-//   const [isCooking, setIsCooking] = useState(false);
-
-//   // Timer pour la cuisson
-//   useEffect(() => {
-//     if (timeLeft === null || timeLeft <= 0) {
-//       setIsCooking(false);
-//       return;
-//     }
-
-//     const timer = setTimeout(() => {
-//       setTimeLeft(timeLeft - 1);
-//     }, 1000);
-
-//     return () => clearTimeout(timer);
-//   }, [timeLeft]);
-
-//   // Lancer la cuisson
-//   const startCooking = (time) => {
-//     setTimeLeft(time * 60); // Convertir en secondes
-//     setIsCooking(true);
-//   };
-
-//   return (
-//     <div className="app-container">
-//       {!category && <h1>🍝 PASTA TIMER 🍝</h1>}
-
-//       {/* Sélection de la catégorie */}
-//       {!category && (
-//         <div className="category-buttons">
-//           <button onClick={() => setCategory("short")}>Short Pasta</button>
-//           <button onClick={() => setCategory("long")}>Long Pasta</button>
-//           <button onClick={() => setCategory("special")}>Special Pasta</button>
-//         </div>
-//       )}
-
-//       {/* Slider des pâtes */}
-//       {category && pastaData[category] && (
-//         <div className="slider-container">
-//           <div className="slider">
-//             <div className="slides">
-//               {pastaData[category].map((pasta, index) => (
-//                 <div
-//                   key={pasta.name}
-//                   id={`slide-${index + 1}`}
-//                   className="slide"
-//                   onClick={() => setSelectedPasta(pasta)}
-//                 >
-//                   <h3>{pasta.name}</h3>
-//                   <p>🍽 Al Dente: {pasta.alDente} min</p>
-//                   <p>🔥 Well Done: {pasta.wellCooked} min</p>
-//                 </div>
-//               ))}
-//             </div>
-//           </div>
-//         </div>
-//       )}
-
-//       {/* Détails et cuisson */}
-//       {selectedPasta && (
-//         <div className="pasta-info">
-//           <h2>Cooking {selectedPasta.name}!</h2>
-//           <p>🍽 Al Dente: {selectedPasta.alDente} min</p>
-//           <p>🔥 Well Done: {selectedPasta.wellCooked} min</p>
-
-//           {!isCooking ? (
-//             <>
-//               <button onClick={() => startCooking(selectedPasta.alDente)}>Al Dente</button>
-//               <button onClick={() => startCooking(selectedPasta.wellCooked)}>Well Done</button>
-//             </>
-//           ) : (
-//             <h3>⏳ Time Left: {Math.floor(timeLeft / 60)}:{(timeLeft % 60).toString().padStart(2, "0")}</h3>
-//           )}
-//         </div>
-//       )}
-
-//       {/* Bouton Retour */}
-//       {category && (
-//         <button className="back-button" onClick={() => setCategory(null)}>⬅ Back</button>
-//       )}
-//     </div>
-//   );
-// };
-
-// export default App;
-
-
-
-// import { useState, useEffect } from 'react';
-// import './App.css';
-// import Countdown from 'react-countdown';
-// import Slider from 'react-slick';
-// import pastaData from './data/pastaData.json';
-
-// function App() {
-//   const [category, setCategory] = useState(null); // Category selection
-//   const [selectedPasta, setSelectedPasta] = useState(null); // Selected pasta
-//   const [cookingStyle, setCookingStyle] = useState(null); // Al dente or well done
-//   const [timer, setTimer] = useState(null); // Timer state
-//   const [showModal, setShowModal] = useState(false); // To control the modal visibility for cooking style
-//   const [showTimerModal, setShowTimerModal] = useState(false); // To control the timer modal visibility
-//   const [showReadyMessage, setShowReadyMessage] = useState(false); // To control the "Ready, bby" message visibility
-
-//   // Slider settings for swipeable carousel
-//   const sliderSettings = {
-//     dots: false, // Disable the dots navigation
-//     infinite: true, // Enable infinite looping
-//     speed: 500, // Set the speed for sliding
-//     slidesToShow: 1, // Only show one slide at a time
-//     slidesToScroll: 1, // Scroll one slide at a time
-//     centerMode: true, // Center the current slide
-//     focusOnSelect: true, // Allow clicking to select a pasta
-//     variableWidth: true, // Allow variable width for each slide (important for swipe)
-//     draggable: true, // Enable dragging for carousel (important for desktop)
-//     swipeToSlide: true, // Enable swipe functionality for mobile/tablet
-//     touchMove: true, // Enable touch swipe move for mobile/tablet
-//     swipe: true, // Enable swipe gesture functionality
-//     arrows: false, // Disable previous/next arrows
-//     centerPadding: "0", // Remove extra space on each side when scrolling
-//   };
-
-//   // Log when the selected pasta is changed
-//   useEffect(() => {
-//     console.log('Selected pasta changed:', selectedPasta);
-//   }, [selectedPasta]);
-
-//   // Start the timer based on selected pasta and cooking style
-//   const startTimer = () => {
-//     if (!selectedPasta || !cookingStyle) return;
-
-//     const timeInMinutes = selectedPasta[cookingStyle]; // Get the time for the selected cooking style
-
-//     // Ensure time is valid
-//     if (isNaN(timeInMinutes)) {
-//       console.error('Invalid cooking time');
-//       return;
-//     }
-
-//     setTimer(Date.now() + timeInMinutes * 60000); // Set the countdown timer
-
-//     setShowTimerModal(true); // Show the timer modal when the timer starts
-//     setShowReadyMessage(false); // Reset the "Ready, bby" message when starting a new timer
-//   };
-
-//   // This callback will be called when the countdown finishes
-//   const handleCountdownComplete = () => {
-//     setShowReadyMessage(true); // Show the "Ready, bby" message when the timer finishes
-//   };
-
-//   // Log state updates to check
-//   console.log('Selected category:', category);
-//   console.log('Selected pasta:', selectedPasta);
-
-//   return (
-//     <div className='pasta-timer-all'>
-//       {/* Show title until a category is selected */}
-//       {!category && <h1>PASTAAA TIMER pshhpshhh</h1>}
-
-//       {/* Category selection */}
-//       {!category && (
-//         <div className='pasta-choice'>
-//           <button onClick={() => setCategory('short')}>Short Pasta</button>
-//           <button onClick={() => setCategory('long')}>Long Pasta</button>
-//           <button onClick={() => setCategory('special')}>Special Pasta</button>
-//         </div>
-//       )}
-
-//       {/* Display pasta options after category selection */}
-//       {category && pastaData[category] && (
-//         <div style={{ width: '100vw', overflow: 'hidden' }}>
-//           <h2>Select your pasta:</h2>
-//           <Slider {...sliderSettings}>
-//             {pastaData[category].map((pasta) => (
-//               <div
-//                 key={pasta.name}
-//                 onClick={() => {
-//                   setSelectedPasta(pasta); // Update selected pasta
-//                   setShowModal(true); // Show the modal for cooking style
-//                   console.log('Pasta clicked:', pasta.name); // Log selected pasta
-//                 }}
-//                 className={`pasta-card ${selectedPasta?.name === pasta.name ? 'selected' : ''}`} // Add selected class for styling
-//                 style={{
-//                   padding: '10px',
-//                   cursor: 'pointer',
-//                   width: '200px', // Width for each pasta card
-//                   margin: '0 10px', // Margin between cards
-//                 }}
-//               >
-//                 <h3>{pasta.name}</h3>
-//                 <p>Al Dente: {pasta.alDente} min</p>
-//                 <p>Well Done: {pasta.wellCooked} min</p>
-//               </div>
-//             ))}
-//           </Slider>
-//         </div>
-//       )}
-
-//       {/* Modal for choosing cooking style */}
-//       {showModal && selectedPasta && (
-//         <div className="modal">
-//           <div className="modal-content">
-//             <h2>Choose your cooking style for {selectedPasta.name}:</h2>
-//             <button onClick={() => { setCookingStyle('alDente'); setShowModal(false); }}>Al Dente</button>
-//             <button onClick={() => { setCookingStyle('wellCooked'); setShowModal(false); }}>Well Done</button>
-//             <button onClick={() => { setCookingStyle(null); setShowModal(false); }}>Any Style</button>
-//             <button onClick={() => setShowModal(false)}>Close</button>
-//           </div>
-//         </div>
-//       )}
-
-//       {/* Timer modal */}
-//       {showTimerModal && timer && (
-//         <div className="timer-modal">
-//           <div className="timer-modal-content">
-//             <Countdown date={timer} onComplete={handleCountdownComplete} />
-//             {/* Show "Ready, bby" message after timer finishes */}
-//             {showReadyMessage && (
-//               <div style={{ marginTop: '20px', fontSize: '24px', color: 'green' }}>
-//                 <p>Ready, bby!</p>
-//               </div>
-//             )}
-//           </div>
-//         </div>
-//       )}
-
-//       {/* Timer button */}
-//       {selectedPasta && cookingStyle && (
-//         <button onClick={startTimer} style={{ marginTop: '10px', padding: '10px' }}>
-//           Start Timer
-//         </button>
-//       )}
-//     </div>
-//   );
-// }
-
-// export default App;
-
-
-
-
-// import { useState, useEffect } from 'react';
-// import './App.css';
-// import Countdown from 'react-countdown';
-// import Slider from 'react-slick';
-// import pastaData from './data/pastaData.json';
-
-// function App() {
-//   const [category, setCategory] = useState(null); // Category selection
-//   const [selectedPasta, setSelectedPasta] = useState(null); // Selected pasta
-//   const [cookingStyle, setCookingStyle] = useState(null); // Al dente or well done
-//   const [timer, setTimer] = useState(null); // Timer state
-//   const [showModal, setShowModal] = useState(false); // To control the modal visibility
-//   const [showReadyMessage, setShowReadyMessage] = useState(false); // To control the "Ready, bby" message visibility
-//   const [isCategorySelected, setIsCategorySelected] = useState(false); // To handle category selection
-
-//   // Slider settings for horizontal scrolling
-//   const sliderSettings = {
-//     dots: false,
-//     infinite: true,
-//     speed: 500,
-//     slidesToShow: 1, // Show one pasta card at a time
-//     slidesToScroll: 1,
-//     centerMode: true,
-//     focusOnSelect: true, // Allow clicking to select the pasta
-//     variableWidth: true, // Variable width for scrolling effect
-//   };
-
-//   // Log when the selected pasta is changed
-//   useEffect(() => {
-//     console.log('Selected pasta changed:', selectedPasta);
-//   }, [selectedPasta]);
-
-//   // Start the timer based on selected pasta and cooking style
-//   const startTimer = () => {
-//     if (!selectedPasta || !cookingStyle) return;
-
-//     const timeInMinutes = selectedPasta[cookingStyle]; // Get the time for the selected cooking style
-//     setTimer(Date.now() + timeInMinutes * 60000); // Set the countdown timer
-
-//     setShowReadyMessage(false); // Reset the "Ready, bby" message when starting a new timer
-//   };
-
-//   // This callback will be called when the countdown finishes
-//   const handleCountdownComplete = () => {
-//     setShowReadyMessage(true); // Show the "Ready, bby" message when the timer finishes
-//   };
-
-//   // Log state updates to check
-//   console.log('Selected category:', category);
-//   console.log('Selected pasta:', selectedPasta);
-
-//   return (
-//     <div className='pasta-timer-all'>
-//       {/* Show title until a category is selected */}
-//       {!category && <h1>PASTAAA TIMER pshhpshhh</h1>}
-
-//       {/* Category selection */}
-//       {!category && (
-//         <div className='pasta-choice'>
-//           <button onClick={() => { setCategory('short'); setIsCategorySelected(true); }}>Short Pasta</button>
-//           <button onClick={() => { setCategory('long'); setIsCategorySelected(true); }}>Long Pasta</button>
-//           <button onClick={() => { setCategory('special'); setIsCategorySelected(true); }}>Special Pasta</button>
-//         </div>
-//       )}
-
-//       {/* Display pasta options after category selection */}
-//       {category && pastaData[category] && (
-//         <div style={{ width: '100vw', overflow: 'hidden' }}>
-//           <h2>Select your pasta:</h2>
-//           <Slider {...sliderSettings}>
-//             {pastaData[category].map((pasta) => (
-//               <div
-//                 key={pasta.name}
-//                 onClick={() => {
-//                   setSelectedPasta(pasta); // Update selected pasta
-//                   setShowModal(true); // Show the modal for cooking style
-//                   console.log('Pasta clicked:', pasta.name); // Log selected pasta
-//                 }}
-//                 className={`pasta-card ${selectedPasta?.name === pasta.name ? 'selected' : ''}`} // Add selected class for styling
-//                 style={{
-//                   padding: '10px',
-//                   cursor: 'pointer',
-//                   width: '200px', // Width for each pasta card
-//                   margin: '0 10px', // Margin between cards
-//                 }}
-//               >
-//                 <h3>{pasta.name}</h3>
-//                 <p>Al Dente: {pasta.alDente} min</p>
-//                 <p>Well Done: {pasta.wellCooked} min</p>
-//               </div>
-//             ))}
-//           </Slider>
-
-//           {/* Timer button */}
-//           {selectedPasta && cookingStyle && (
-//             <button onClick={startTimer} style={{ marginTop: '10px', padding: '10px' }}>
-//               Start Timer
-//             </button>
-//           )}
-
-//           {/* Timer countdown display */}
-//           {timer && (
-//             <div style={{ marginTop: '20px', fontSize: '24px' }}>
-//               <Countdown date={timer} onComplete={handleCountdownComplete} />
-//             </div>
-//           )}
-
-//           {/* Show "Ready, bby" message after timer finishes */}
-//           {showReadyMessage && (
-//             <div style={{ marginTop: '20px', fontSize: '24px', color: 'green' }}>
-//               <p>Ready, bby!</p>
-//             </div>
-//           )}
-//         </div>
-//       )}
-
-//       {/* Modal for choosing cooking style */}
-//       {showModal && selectedPasta && (
-//         <div className="modal">
-//           <div className="modal-content">
-//             <h2>Choose your cooking style for {selectedPasta.name}:</h2>
-//             <button onClick={() => { setCookingStyle('alDente'); setShowModal(false); }}>Al Dente</button>
-//             <button onClick={() => { setCookingStyle('wellCooked'); setShowModal(false); }}>Well Done</button>
-//             <button onClick={() => { setCookingStyle(null); setShowModal(false); }}>Any Style</button>
-//             <button onClick={() => setShowModal(false)}>Close</button>
-//           </div>
-//         </div>
-//       )}
-//     </div>
-//   );
-// }
-
-// export default App;
 

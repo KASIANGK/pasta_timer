@@ -55,17 +55,34 @@
 
 .modal {
   position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
   background: #f2b79c;
   color: #d76835;
-  padding: 50px;
+  padding: 27px;
   border-radius: 10px;
   text-align: center;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  height: 370px;
+  height: 330px;
   font-size: 1.8em;
+  z-index: 1000; 
+  margin-left: 35%;
+  margin-top: 12%;
+  width: 400px;
+}
+
+.modal-finished {
+  position: fixed;
+  background: #f2b79c;
+  color: #d76835;
+  padding: 27px;
+  border-radius: 10px;
+  text-align: center;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  height: 330px;
+  font-size: 1.8em;
+  z-index: 1000; 
+  margin-left: 35%;
+  margin-top: 12%;
+  width: 400px;
 }
 
 .modal button {
@@ -84,6 +101,25 @@
   border-radius: 5px;
   transition: all 0.3s ease; 
 }
+.modal {
+  transition: all 0.3s ease-in-out;
+}
+
+.modal.minimized {
+  width: 300px;
+  height: 150px;
+  padding: 10px;
+  background-color: #f2b79c;
+}
+
+.timer {
+  transition: all 0.3s ease-in-out;
+}
+
+.texte-modal {
+  transition: opacity 0.3s ease;
+}
+
 
 .modal button:hover {
   background-color: #D0EAFF;
@@ -101,12 +137,218 @@
 .timer {
   background-color: #D0EAFF;
   border-radius: 10px;
-  height: 200px;
+  height: 190px;
   display: flex;
   justify-content: center;
   align-items: center;
-  /* padding: 30px; */
+  margin-bottom: 5%;
 }
+
+.texte-modal h2 {
+  margin: 0% ;
+}
+
+/* Fond sombre et flou derrière la modal */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.6); /* Fond noir transparent */
+  backdrop-filter: blur(10px); /* Effet de flou */
+  z-index: 999; 
+}
+
+/* Style de la modal */
+
+/* Style de la modal réduite */
+.modal.minimized {
+  width: 300px;
+  height: 150px;
+  padding: 10px;
+  background-color: #f2b79c;
+  font-size: 1.2em;
+  text-align: center;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  transform: translate(-50%, -50%) !important;
+}
+
+.modal.minimized .timer {
+  height: 60px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-overlay.minimized {
+  display: none; /* Cacher l'overlay lorsque la modal est réduite */
+}
+
+.buttons-zoom-dezoom {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: -9.6%;
+  /* margin-top: -10.1%; */
+}
+/* Style pour les boutons */
+.modal button {
+  margin: 5px;
+  padding: 8px 15px;
+  border: none;
+  background-color: #ff914d;
+  color: white;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: all 0.3s ease;
+}
+
+.modal button:hover {
+  background-color: #D0EAFF;
+  color: rgb(203, 114, 19);
+  transform: scale(1.1);
+  box-shadow: 0px 0px 15px 5px rgba(66, 29, 6, 0.7);
+  text-shadow: 0px 0px 8px rgba(255, 255, 255, 0.6);
+}
+
+/* Style du fond sombre et flou */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(10px);
+  z-index: 999;
+  transition: opacity 0.3s ease;
+}
+
+.modal.minimized .modal-overlay {
+  display: none; /* Pas de flou lorsque la modal est réduite */
+}
+
+/* From Uiverse.io by xopc333 */ 
+.div-box-og {
+  display: block;
+  position: relative;
+  width: 56px;
+  height: 56px;
+  margin: 0;
+  overflow: hidden;
+  outline: none;
+  background-color: transparent;
+  cursor: pointer;
+  border: 0;
+}
+
+.div-box-og:before,
+.div-box-og:after {
+  content: "";
+  position: absolute;
+  border-radius: 50%;
+  inset: 7px;
+}
+
+.div-box-og:before {
+  border: 4px solid #f0eeef;
+  transition: opacity 0.4s cubic-bezier(0.77, 0, 0.175, 1) 80ms,
+    transform 0.5s cubic-bezier(0.455, 0.03, 0.515, 0.955) 80ms;
+}
+
+.div-box-og:after {
+  border: 4px solid #96c0f0;
+  transform: scale(1.3);
+  transition: opacity 0.4s cubic-bezier(0.165, 0.84, 0.44, 1),
+    transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  opacity: 0;
+}
+
+.div-box-og:hover:before,
+.div-box-og:focus:before {
+  opacity: 0;
+  transform: scale(0.7);
+  transition: opacity 0.4s cubic-bezier(0.165, 0.84, 0.44, 1),
+    transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.div-box-og:hover:after,
+.div-box-og:focus:after {
+  opacity: 1;
+  transform: scale(1);
+  transition: opacity 0.4s cubic-bezier(0.77, 0, 0.175, 1) 80ms,
+    transform 0.5s cubic-bezier(0.455, 0.03, 0.515, 0.955) 80ms;
+}
+
+.button-box {
+  display: flex;
+  /* position: absolute;
+  top: 0;
+  left: 0; */
+}
+
+.button-elemm {
+  display: block;
+  width: 80px;
+  height: 80px;
+  transform: rotate(180deg);
+  fill: #f0eeef;
+  margin: -15.5px;
+}
+.div-box-og:hover .button-elemm,
+.div-box-og:focus .button-elemm {
+  transition: 0.4s;
+  transform: translateX(-0.5px);
+  margin: -30.2px;
+  width: 125px;
+  height: 125px;
+}
+
+button {
+  margin-top: 20px;
+  padding: 10px 20px;
+  background-color: #ff914d;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+button:hover {
+  background-color: #D0EAFF;
+  color: rgb(203, 114, 19);
+  transform: scale(1.1);
+  box-shadow: 0px 0px 15px 5px rgba(66, 29, 6, 0.7);
+  text-shadow: 0px 0px 8px rgba(255, 255, 255, 0.6);
+}
+
+/* Styles pour les cœurs */
+.hearts {
+  font-size: 40px;
+  margin-top: 20px;
+  animation: heart-beat 1.5s infinite;
+}
+
+/* Animation de battement des cœurs */
+@keyframes heart-beat {
+  0% {
+    transform: scale(1);
+  }
+  25% {
+    transform: scale(1.2);
+  }
+  50% {
+    transform: scale(1);
+  }
+  75% {
+    transform: scale(1.2);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
 
 
 .choix-pasta {
@@ -156,10 +398,9 @@
 }
 
 .pasta-card {
-  background-color: #F9968B !important;
+  /* background-color: #F9968B !important; */
   /* background-color: #D0EAFF !important; */
   width: 100%;
-  /* width: 500px; */
   border-radius: 10px;
   padding: 10px;
   text-align: center;
@@ -170,7 +411,7 @@
 }
 
 .pasta-card:hover {
-  transform: scale(1.05); /* Effet de zoom pour l'image */
+  transform: scale(1.05); 
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
@@ -183,13 +424,44 @@
   border: 2px solid orange;
 }
 
+.pasta-card {
+  background-color: #D0EBFF !important;
+  transition: background-color 0.01s ease-in-out, transform 0.0001s;
+  padding: 10px;
+  border-radius: 10px;
+  cursor: pointer;
+  text-align: center;
+}
+
+.pasta-card:hover, 
+.pasta-card.selected {
+  background-color: #F596B4 !important; 
+  transform: scale(1); /* Effet zoom léger */
+  border: 3px solid #de809d;
+}
+
+.pasta-card img {
+  transition: opacity 0.5s ease-in-out, transform 0.3s ease-in-out;
+}
+
+.pasta-card:hover img,
+.pasta-card.selected img {
+  transform: scale(1.1);
+}
 
 .pasta-card img {
   max-width: 100%;
   max-height: 150px;
   object-fit: cover;
   border-radius: 5px;
-  margin-bottom: 10px;
+}
+
+.pasta-card p {
+  color: #d76835;
+}
+
+.pasta-card:hover p {
+  color: #D0EAFF;
 }
 
 .pasta-timer-all {
@@ -198,7 +470,7 @@
 }
 
 .pasta-timer-all-title {
-  display: flex;          /* Utilisation de Flexbox pour aligner les éléments */
+  display: flex;          
   justify-content: flex-start;  
   text-align: start;
   height: 100%;   
@@ -242,20 +514,15 @@
   align-items: center;
   flex-direction: row;
   border-radius: 10px;
-  /* gap: 5%; */
   width: 700px;
-  /* width: 100%; */
   background-color: #e8895d;
   /* background-color: #e9aa79; */
 
   /* background-color: #5784BA; */
   /* overflow: scroll; */
   overflow-x: auto;
-  /* scroll-snap-align: center; */
-  /* padding-left: 30px;
-  padding-right: 30px; */
   padding: 0 10px;
-  scroll-snap-type: x mandatory; /* Active le snap horizontal */
+  scroll-snap-type: x mandatory; 
   scroll-snap-align: start; 
 }
 
@@ -269,8 +536,9 @@
 }
 
 .main-illustration img {
-  width: 300px;
-  border-radius: 10px;
+  width: 330px;
+  /* border-radius: 10px; */
+  margin-top: -2%;
 }
 
 .choix-categorie {
@@ -334,7 +602,7 @@
   color: white;
   font-size: 24px;
   font-weight: bold;
-  text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7);
+  /* text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7); */
   border-radius: 10px;
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
 }
@@ -344,7 +612,7 @@
   border-radius: 10px;
   transform: scale(1.1); /* Légère augmentation de la taille pour l'effet de "sonner" */
   box-shadow: 0px 0px 15px 5px rgba(66, 29, 6, 0.7); /* Effet de brillance autour du bouton */
-  text-shadow: 0px 0px 8px rgba(255, 255, 255, 0.6);
+  /* text-shadow: 0px 0px 8px rgba(255, 255, 255, 0.6); */
   animation: fly-1 0.6s ease-in-out infinite alternate;
 }
 
@@ -429,3 +697,5 @@ button:active {
     transform: translateY(-0.1em);
   }
 }
+
+
