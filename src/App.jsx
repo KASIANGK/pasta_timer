@@ -206,19 +206,18 @@ const App = () => {
                   className={`modal-overlay ${isMinimized ? 'minimized' : ''}`}
                   onClick={() => setShowModal(false)}
                 ></div>
-                
-                <div
-                  className={`modal ${isMinimized ? 'minimized' : ''}`}
-                  style={{
-                    top: `${modalPosition.y}px`,
-                    left: `${modalPosition.x}px`,
-                    position: 'absolute', // Position absolue pour déplacer la modal
-                  }}
-                  onMouseDown={handleMouseDown} // Commencer le glissement lors du clic
-                >
+              
                   {/* Affichage du timer ou de la fin de cuisson */}
                   {timeLeft > 0 ? (
-                    <>
+                    <div
+                    className={`modal ${isMinimized ? 'minimized' : ''}`}
+                    style={{
+                      top: `${modalPosition.y}px`,
+                      left: `${modalPosition.x}px`,
+                      position: 'absolute', // Position absolue pour déplacer la modal
+                    }}
+                    onMouseDown={handleMouseDown} // Commencer le glissement lors du clic
+                    >
                       <div className="buttons-zoom-dezoom">
                         {isMinimized ? (
                           <div className="div-box-og " onClick={toggleMinimized}>
@@ -255,100 +254,32 @@ const App = () => {
                       )}
 
                       <button onClick={() => setShowModal(false)}>STOP</button>
-                    </>
+                    </div>
+
                   ) : (
-                    <div className="modal-finished" style={{ display: 'block' }}>
+
+                    <div 
+                    className={`modal-finished ${isMinimized ? 'finished-minimized' : ''}`}
+                    style={{
+                      top: `${modalPosition.y}px`,
+                      left: `${modalPosition.x}px`,
+                      position: 'absolute', // Position absolue pour déplacer la modal
+                    }}
+                    onMouseDown={handleMouseDown}
+                    onClick={() => setShowModal(false)}
+                    >
                       {/* Message et effet de cœurs quand la cuisson est terminée */}
-                      <h2>BUON APPETITOOOOO</h2>
-                      {!isMinimized && (
+                      <h2 className="hearts">ENJOY ❤️</h2>
+                      {/* {!isMinimized && (
                         <div className="hearts">
-                          ❤️❤️❤️❤️❤️❤️❤️❤️❤️
+                          ❤️❤️❤️❤️❤️
                         </div>
-                      )}
-                      <button className="button-modal-zoom" onClick={toggleMinimized}>
-                        {isMinimized ? 'Agrandir' : 'Réduire'}
-                      </button>
-                      <button onClick={() => setShowModal(false)}>Fermer</button>
+                      )} */}
                     </div>
                   )}
-
-                  {/* Ajoutons un console.log ici pour vérifier si timeLeft devient 0 */}
                   {console.log(timeLeft)}
-                </div>
               </>
             )}
-
-            {/* {showModal && (
-              <>
-                <div
-                  className={`modal-overlay ${isMinimized ? 'minimized' : ''}`}
-                  onClick={() => setShowModal(false)}
-                ></div>
-                <div
-                  className={`modal ${isMinimized ? 'minimized' : ''}`}
-                  style={{
-                    top: `${modalPosition.y}px`,
-                    left: `${modalPosition.x}px`,
-                    position: 'absolute', // Position absolue pour déplacer la modal
-                  }}
-                  onMouseDown={handleMouseDown} // Commencer le glissement lors du clic
-                >
-                  {timeLeft > 0 ? (
-                    <>
-                      <div className="buttons-zoom-dezoom">
-                        {isMinimized ? (
-                          <div className="div-box-og " onClick={toggleMinimized}>
-                            <div className="btn-box button-elem" onClick={toggleMinimized}>
-                              <svg className="button-elemm" onClick={toggleMinimized} fill="#00a3d7" height="40px" width="40px" version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 299.995 299.995">
-                                <path d="M139.415,96.195c-22.673,0-41.056,18.389-41.056,41.062c0,22.676,18.383,41.059,41.056,41.059 c7.446,0,14.41-2.01,20.43-5.478c2.625-1.511,5.06-3.308,7.275-5.342c0.08-0.073,0.163-0.145,0.241-0.218 c0.705-0.659,1.393-1.343,2.052-2.049c0.036-0.039,0.07-0.078,0.106-0.117c2.754-2.977,5.073-6.367,6.86-10.068 c2.596-5.387,4.095-11.404,4.095-17.787C180.474,114.584,162.093,96.195,139.415,96.195z M159.256,146.973h-39.684 c-4.298,0-7.781-3.483-7.781-7.781c0-4.298,3.483-7.781,7.781-7.781h39.684c4.298,0,7.781,3.483,7.781,7.781 C167.037,143.49,163.554,146.973,159.256,146.973z"></path>
-                              </svg>
-                            </div>
-                          </div>
-                        ) : (
-                          <div className="div-box-og"onClick={toggleMinimized}>
-                          <div className="btn-box button-elem" onClick={toggleMinimized}>
-                          <svg className="button-elemm"  onClick={toggleMinimized} fill="#00a3d7" height="40px" width="40px" version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 299.998 299.998">
-                            <path d="M139.414,96.193c-22.673,0-41.056,18.389-41.056,41.062c0,22.678,18.383,41.062,41.056,41.062 c22.678,0,41.059-18.383,41.059-41.062C180.474,114.582,162.094,96.193,139.414,96.193z M159.255,146.971h-12.06v12.06 c0,4.298-3.483,7.781-7.781,7.781c-4.298,0-7.781-3.483-7.781-7.781v-12.06h-12.06c-4.298,0-7.781-3.483-7.781-7.781 c0-4.298,3.483-7.781,7.781-7.781h12.06v-12.063c0-4.298,3.483-7.781,7.781-7.781c4.298,0,7.781,3.483,7.781,7.781v12.063h12.06 c4.298,0,7.781,3.483,7.781,7.781C167.036,143.488,163.555,146.971,159.255,146.971z"></path>
-                          </svg>
-                          </div>
-                          </div>
-                        )}
-                      </div>
-
-                      <div className={`timer ${!isMinimized ? 'minimized' : ''}`}>
-                        <h1>
-                          {Math.floor(timeLeft / 60)}:
-                          {String(timeLeft % 60).padStart(2, "0")}
-                        </h1>
-                        
-                      </div>
-                      {!isMinimized ? (
-                          <div className='texte-modal'>
-                            <h2>Cuisson en cours...</h2>
-                          </div>
-                      ) : (
-                        <p></p>
-                      )
-                      }
-                      <button onClick={() => setShowModal(false)}>STOP</button>
-                    </>
-                  ) : (
-                    <div className="modal-finished">
-                      <h2>BUON APPETITOOOOO</h2>
-                      {!isMinimized && (
-                        <div className="hearts">
-                          ❤️❤️❤️❤️❤️❤️❤️❤️❤️
-                        </div>
-                      )}
-                      <button className="button-modal-zoom" onClick={toggleMinimized}>
-                        {isMinimized ? 'Agrandir' : 'Réduire'}
-                      </button>
-                      <button onClick={() => setShowModal(false)}>Fermer</button>
-                    </div>
-                  )}
-                </div>
-              </>
-            )} */}
           </div>
         </div>
       </div>
