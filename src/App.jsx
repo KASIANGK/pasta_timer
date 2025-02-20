@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import "./App.css";
 import pastaData from "/src/data/pastaData.json"; 
+import { motion } from "framer-motion";
 
 const App = () => {
   const [category, setCategory] = useState(null);
@@ -19,9 +20,18 @@ const App = () => {
   const categoryDescriptions = {
     short: "Pour les gens pressés ou qui ne savent pas viser avec une fourchette",
     long: "Idéal pour twister autour de la fourchette... ou autour de ta dignité",
-    special: "Artistes incompris 🥹",
+    special: "Pour les artistes incompris 🥹 Des pâtes qui ont autant de personnalité que toi",
   };
   const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [isStepTwoThreeOpen, setIsStepTwoThreeOpen] = useState(false);
+  const sliderRef = useRef(null);
+  const allPasta = Object.values(pastaData).flat(); // Fusionne toutes les pâtes
+
+  const filteredPasta = allPasta.filter((pasta) =>
+    pasta.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+  const [isHovered, setIsHovered] = useState(false);
+
 
   useEffect(() => {
     if (timeLeft === null) {
@@ -87,94 +97,162 @@ const App = () => {
   }, [timeLeft]);
   
 
-  // const filteredPasta = category
-  // ? pastaData[category].filter((pasta) =>
-  //     pasta.name.toLowerCase().includes(searchTerm.toLowerCase())
-  //   )
-  // : [];
+  const handlePastaSelection = (pasta) => {
+    setSelectedPasta(pasta);  // Sélectionner la pâte
+    setIsStepTwoThreeOpen(true);  // Ouvrir la section des étapes deux et trois
+  };
 
-  const allPasta = Object.values(pastaData).flat(); // Fusionne toutes les pâtes
+  const handleItemClick = (pastaName) => {
+    let selectedCategory = null;
+    let selectedPastaIndex = 0;
+  
+    // Trouver la catégorie et l'index de la pâte sélectionnée
+    for (let category in pastaData) {
+      const foundPastaIndex = pastaData[category].findIndex(pasta => pasta.name === pastaName);
+      if (foundPastaIndex !== -1) {
+        selectedCategory = category;
+        selectedPastaIndex = foundPastaIndex;
+        break;
+      }
+    }
+  
+    if (selectedCategory) {
+      setCategory(selectedCategory);
+      const selectedPasta = pastaData[selectedCategory][selectedPastaIndex];
+      setSelectedPasta(selectedPasta);
+      setIsStepTwoThreeOpen(true);
+  
+      // Attendre le rendu avant de scroller
+      setTimeout(() => {
+        if (sliderRef.current) {
+          const slider = sliderRef.current;
+          const pastaCards = slider.children;
+          
+          if (pastaCards[selectedPastaIndex]) {
+            const selectedCard = pastaCards[selectedPastaIndex];
+            slider.scrollLeft = selectedCard.offsetLeft - slider.offsetLeft;
+          }
+        }
+      }, 100); 
+    }
+  };
 
-  const filteredPasta = allPasta.filter((pasta) =>
-    pasta.name.toLowerCase().includes(searchTerm.toLowerCase())
-  );
 
+  // Fonction pour fermer la pasta-list si on clique en dehors
+  const handleClickOutside = (e) => {
+    if (!e.target.closest('.searchbar')) {
+      setIsSearchOpen(false);  // Fermer la liste si le clic est en dehors de .searchbar
+    }
+  };
+  
+  useEffect(() => {
+    // Ajouter l'écouteur d'événements
+    document.addEventListener('click', handleClickOutside);
+
+    // Nettoyage pour retirer l'écouteur lors du démontage
+    return () => {
+      document.removeEventListener('click', handleClickOutside);
+    };
+  }, []);
+
+  
   return (
     <div className="pasta-timer">
       <div className="main-container">
+
+        {/* SEARCHBAR */}
+        <div className="searchbar">
+          {/* Bouton de recherche qui s'agrandit */}
+          <div className="search-container">
+            <input
+              type="text"
+              placeholder="Rechercher..."
+              className={`search-input ${isSearchOpen ? "open" : ""}`}
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+            <button
+              className="search-button"
+              onClick={() => setIsSearchOpen(!isSearchOpen)}
+            >
+              🔍
+            </button>
+          </div>
+
+          {/* Résultats filtrés */}
+          {searchTerm && isSearchOpen && (
+            <div className={`pasta-list ${filteredPasta.length > 0 ? "show" : ""}`}>
+              {filteredPasta.length > 0 ? (
+                filteredPasta.map((pasta) => (
+                  <div key={pasta.name} className="pasta-item" onClick={() => handleItemClick(pasta.name)} >
+
+                    <img src={pasta.image} alt={pasta.name} />
+                    <p>{pasta.name}</p>
+                  </div>
+                ))
+              ) : (
+                <p className="pasta-item-fail">Aucune pâte trouvée</p>
+              )}
+            </div>
+          )}
+        </div>
+        
         <div className="container">
 
           {/* STEP ONE */}
           <div className="step-one">
-          <div className="step-one-title">
-            <div className="step-one-first-line">
-              <div className="step-icon">
-                <svg height="50px" width="50px" viewBox="0 0 496.158 496.158" xmlns="http://www.w3.org/2000/svg" fill="#D0EAFF">
-                  <path d="M248.082,0.003C111.07,0.003,0,111.061,0,248.085c0,137,111.07,248.07,248.082,248.07 c137.006,0,248.076-111.07,248.076-248.07C496.158,111.061,385.088,0.003,248.082,0.003z"></path> 
-                  <path fill="#CFB4AF" d="M278.767,145.419c-3.126-4.003-7.276-6.006-12.451-6.006c-4.591,0-7.716,0.879-9.375,2.637 c-1.662,1.758-5.226,6.445-10.693,14.063c-5.47,7.617-11.744,14.502-18.823,20.654c-7.082,6.152-16.53,12.012-28.345,17.578 c-7.91,3.712-13.429,6.738-16.553,9.082c-3.126,2.344-4.688,6.006-4.688,10.986c0,4.298,1.586,8.082,4.761,11.353 c3.172,3.273,6.812,4.907,10.913,4.907c8.592,0,25.292-9.521,50.098-28.564V335.41c0,7.814,1.806,13.722,5.42,17.725 c3.612,4.003,8.397,6.006,14.355,6.006c13.378,0,20.068-9.814,20.068-29.443V161.972 C283.455,154.941,281.892,149.425,278.767,145.419z"></path>
-                </svg>
-              </div>
-              <div className="searchbar">
-                {/* Bouton de recherche qui s'agrandit */}
-                <div className="search-container">
-                  <button
-                    className="search-button"
-                    onClick={() => setIsSearchOpen(!isSearchOpen)}
-                  >
-                    🔍
-                  </button>
-                  <input
-                    type="text"
-                    placeholder="Rechercher..."
-                    className={`search-input ${isSearchOpen ? "open" : ""}`}
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                  />
+            <div className="step-one-title">
+              <div className="step-one-first-line">
+                <div className="step-icon">
+                  <svg height="50px" width="50px" viewBox="0 0 496.158 496.158" xmlns="http://www.w3.org/2000/svg" fill="#D0EAFF">
+                    <path d="M248.082,0.003C111.07,0.003,0,111.061,0,248.085c0,137,111.07,248.07,248.082,248.07 c137.006,0,248.076-111.07,248.076-248.07C496.158,111.061,385.088,0.003,248.082,0.003z"></path> 
+                    <path fill="#CFB4AF" d="M278.767,145.419c-3.126-4.003-7.276-6.006-12.451-6.006c-4.591,0-7.716,0.879-9.375,2.637 c-1.662,1.758-5.226,6.445-10.693,14.063c-5.47,7.617-11.744,14.502-18.823,20.654c-7.082,6.152-16.53,12.012-28.345,17.578 c-7.91,3.712-13.429,6.738-16.553,9.082c-3.126,2.344-4.688,6.006-4.688,10.986c0,4.298,1.586,8.082,4.761,11.353 c3.172,3.273,6.812,4.907,10.913,4.907c8.592,0,25.292-9.521,50.098-28.564V335.41c0,7.814,1.806,13.722,5.42,17.725 c3.612,4.003,8.397,6.006,14.355,6.006c13.378,0,20.068-9.814,20.068-29.443V161.972 C283.455,154.941,281.892,149.425,278.767,145.419z"></path>
+                  </svg>
                 </div>
-
-                {/* Résultats filtrés */}
-                {searchTerm && (
-                  <div className="pasta-list">
-                    {filteredPasta.length > 0 ? (
-                      filteredPasta.map((pasta) => (
-                        <div key={pasta.name} className="pasta-item">
-                          <img src={pasta.image} alt={pasta.name} />
-                          <p>{pasta.name}</p>
-                        </div>
-                      ))
-                    ) : (
-                      <p>Aucune pâte trouvée</p>
-                    )}
-                  </div>
-                )}
-
               </div>
-            </div>
-            <h1>Choisis la catégorie 👇</h1>
-            {/* <h1>Pick your pasta category 👇</h1> */}
-            <div className="buttons-step-one">
-              <div className="buttons-general">
-                {Object.keys(pastaData).map((cat) => (
-                  <div key={cat} className="button-container">
-                    <button
-                      onClick={() => setCategory(cat)}
-                      onMouseEnter={() => setHoveredCategory(cat)}
-                      onMouseLeave={() => setHoveredCategory(null)}
-                      className={category === cat ? "selected" : ""}
-                    >
-                      {cat}
-                    </button>
-                    {hoveredCategory === cat && (
-                      <p className="hover-text">{categoryDescriptions[cat]}</p>
-                    )}
-                  </div>
+              {/* ANIMATION SUR LE TITRE */}
+              <motion.h1
+                className="animated-title"
+                initial={{ opacity: 0, y: 50 }} // Apparition avec effet de montée
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 1, ease: "easeOut" }}
+                onMouseEnter={() => setIsHovered(true)}
+                onMouseLeave={() => setIsHovered(false)}
+              >
+                {Array.from("Choisis la catégorie 👇").map((letter, index) => (
+                  <motion.span
+                    key={index}
+                    className="letter"
+                    animate={isHovered ? { x: (Math.random() - 0.5) * 20, y: (Math.random() - 0.5) * 20, rotate: (Math.random() - 0.5) * 20 } : { x: 0, y: 0, rotate: 0 }}
+                    transition={{ type: "spring", stiffness: 100, damping: 8 }}
+                  >
+                    {letter}
+                  </motion.span>
                 ))}
-              </div>          
-            </div>
-
-
-
-
+              </motion.h1>
+              {/* <h1>Choisis la catégorie 👇</h1> */}
+              {/* <h1>Pick your pasta category 👇</h1> */}
+              <div className="buttons-step-one">
+                <div className="buttons-general">
+                  {Object.keys(pastaData).map((cat) => (
+                    <div key={cat} className="button-container">
+                      <button
+                        onClick={() => setCategory(cat)}
+                        onMouseEnter={() => setHoveredCategory(cat)}
+                        onMouseLeave={() => setHoveredCategory(null)}
+                        className={category === cat ? "selected" : ""}
+                      >
+                        {cat}
+                      </button>
+                      {hoveredCategory === cat && (
+                        <div className="hover-text-container">
+                          <p className="hover-text">{categoryDescriptions[cat]}</p>
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </div>          
+              </div>
             </div>
             <div className="step-one-illustration">
               <video autoPlay muted playsInline>
@@ -182,9 +260,6 @@ const App = () => {
                 Votre navigateur ne supporte pas la lecture de vidéos.
               </video>
             </div>
-            {/* <div className="step-one-illustration">
-              <img src="/src/assets/images/pasta-step1.jpg" alt="Pasta Illustration"></img>
-            </div> */}
           </div>
 
           {/* STEP TWO AND THREE */}
@@ -211,21 +286,17 @@ const App = () => {
                 </div>
                 <div className="cards-slider">
                   <div className="slider">
-                    <div className="slides">
-                      {pastaData[category].map((pasta) => (
+                    <div className="slides" ref={sliderRef}>
+                      {category && pastaData[category] && pastaData[category].map((pasta) => (
                         <div
                           className={`pasta-card ${selectedPasta?.name === pasta.name ? "selected" : ""}`}
                           key={pasta.name}
-                          onClick={() => setSelectedPasta(pasta)}
+                          onClick={() => handlePastaSelection(pasta)} // Cette fonction doit être correctement définie
                           onMouseEnter={() => setHoveredPasta(pasta.name)}
                           onMouseLeave={() => setHoveredPasta(null)}
                         >
                           <img
-                            src={
-                              hoveredPasta === pasta.name || selectedPasta?.name === pasta.name
-                                ? pasta["image-bis"]
-                                : pasta.image
-                            }
+                            src={hoveredPasta === pasta.name || selectedPasta?.name === pasta.name ? pasta["image-bis"] : pasta.image}
                             alt={pasta.name}
                             className="pasta-image"
                           />
@@ -235,6 +306,7 @@ const App = () => {
                     </div>
                   </div>
                 </div>
+
                 {selectedPasta && (
                   <div className="step-three">
                     {/* STEP THREE */}
