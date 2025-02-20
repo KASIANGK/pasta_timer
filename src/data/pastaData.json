@@ -9,7 +9,7 @@
     "long": [
       { "name": "Spaghetti", "alDente": 0.20, "wellDone": 10, "image": "/src/assets/images/spag.jpg", "image-bis": "/src/assets/images/spag2.jpg"},
       { "name": "Linguine", "alDente": 9, "wellDone": 11, "image": "/src/assets/images/spag.jpg", "image-bis": "/src/assets/images/spag2.jpg"},
-      { "name": "Tagliatelle", "alDente": 7, "wellDone": 9, "image": "/src/assets/images/spag.jpg", "image-bis": "/src/assets/images/spag2.jpg"},
+      { "name": "Tagliatelle", "alDente": 7, "wellDone": 9, "image": "/src/assets/images/farfalle.JPG", "image-bis": "/src/assets/images/spag2.jpg"},
       { "name": "Fettuccine", "alDente": 9, "wellDone": 11, "image": "/src/assets/images/farfalle.JPG", "image-bis": "/src/assets/images/pastaa-bis.JPG"}
     ],
     "special": [

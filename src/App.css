@@ -1,5 +1,9 @@
 /* STEP 1  */
 
+.pasta-timer {
+  margin-top: 5%;
+}
+
 .container {
   display: inline-flex;
   justify-content: center;
@@ -12,7 +16,7 @@
   /* background-color: #e9aa79; */
   /* background-color: #5784BA; */
   overflow-x: auto;
-  /* padding: 0 10px; */
+  padding: 0 10px;
   scroll-snap-type: x mandatory; 
   scroll-snap-align: start; 
 }
@@ -36,36 +40,15 @@
   flex-direction: column;
 }
 
-/* @media (max-width: 475px) {
-  .step-one {
-    margin-left: 20%;
-  }
+.step-one-first-line {
+  display: flex;
 }
-
-@media (max-width: 375px) {
-  .step-one {
-    margin-left: 24%;
-  }
-} */
-
-/* 
-@media (max-width: 325px) {
-  .container {
-    width: 100%;
-  }
-  .step-one {
-    margin-left: 13%;
-  }
-  .steps-two-three {
-    margin-left: 7.5%;
-    margin-top: -12%;
-  }
-} */
 
 .step-one-title {
   display: flex;
   flex-direction: column;
   padding: 25px;
+  padding-bottom: 15px;
 }
 
 .step-icon {
@@ -104,6 +87,38 @@
   margin-top: -7%;
 }
 
+.button-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 60px; 
+  justify-content: center; 
+  position: relative; 
+}
+
+.hover-text {
+  font-size: 14px;
+  color: #555;
+  text-align: center;
+  max-width: fit-content;
+  position: absolute;  
+  bottom: -30px; 
+  background: rgba(255, 255, 255, 0.8);
+  padding: 5px 10px;
+  border-radius: 5px;
+  white-space: nowrap;
+  opacity: 0; 
+  transition: opacity 0.3s ease-in-out;
+}
+
+.button-container:hover .hover-text {
+  opacity: 1; 
+}
+
+.buttons-step-one {
+  display: flex;
+  flex-direction: column;
+}
 
 /* APP'S GENERAL BUTTONS */
 
@@ -144,6 +159,78 @@
   background-color: #F596B4;
   color: white;
   border: 3px solid #DE809D;
+}
+
+/* SEARCHBAR */
+
+.searchbar {
+  text-align: center;
+}
+
+.pasta-list {
+  margin-top: 5px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  justify-content: center;
+}
+
+.pasta-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.pasta-item img {
+  width: 30px;
+  height: 30px;
+  object-fit: cover;
+  border-radius: 10px;
+}
+.pasta-item p {
+  margin-top: 0;
+}
+
+.search-container {
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+
+.search-button {
+  width: 40px;
+  height: 45px;
+  border: none;
+  background: rgb(255, 145, 76);
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.3s ease;
+}
+
+.search-button:hover {
+  transform: scale(1.1);
+}
+
+.search-input {
+  width: 0;
+  opacity: 0;
+  padding: 5px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  transition: width 0.3s ease, opacity 0.3s ease;
+  position: absolute;
+  left: 50px;
+}
+
+.search-input.open {
+  width: 150px; 
+  opacity: 1;
+  margin-left: 10px;
 }
 
 
