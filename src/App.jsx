@@ -3,6 +3,7 @@ import "./App.css";
 import pastaData from "/src/data/pastaData.json"; 
 import { motion } from "framer-motion";
 import CookingButtons from "./assets/Components/CookingButtons";
+import alarmSound from "./assets/images/alert.mp3"
 
 const App = () => {
   const [category, setCategory] = useState(null);
@@ -31,6 +32,60 @@ const App = () => {
   const filteredPasta = allPasta.filter((pasta) =>
     pasta.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
+  const [videoVisible, setVideoVisible] = useState(true);
+  const [modalText, setModalText] = useState('ENJOY ❤️');
+  const [textAnimClass, setTextAnimClass] = useState('');
+  const [imageSrc, setImageSrc] = useState('/src/assets/images/final-image.jpg'); 
+  const [isHovered, setIsHovered] = useState(false);
+  const [alarmAudio, setAlarmAudio] = useState(null);
+
+
+  useEffect(() => {
+    // La vidéo disparaît après 20 secondes et change le texte
+    const timer = setTimeout(() => {
+      setVideoVisible(false);  // Cache la vidéo
+      setModalText('Chef, il est temps de retirer les pastaaa'); // Change le texte
+      setImageSrc('/src/assets/images/final-image.jpg');  // Change l'image
+      setTextAnimClass('animate-text'); // Applique l'animation sur le texte
+    }, 40000);  // 20 secondes
+
+    const timer1 = setTimeout(() => {
+      setVideoVisible(false);  // Cache la vidéo
+      setModalText('Tu fais des pâtes ou du ciment??'); // Change le texte
+      setImageSrc('/src/assets/images/final-image2.jpg');  // Change l'image
+      setTextAnimClass('animate-text'); // Applique l'animation sur le texte
+    }, 45000);  // 20 secondes
+
+    // Le texte change à 25 secondes et change l'image
+    const timer2 = setTimeout(() => {
+      setModalText('Bravo chef, t\'as inventé une nouvelle colle industrielle');
+      setImageSrc('/src/assets/images/final-image3.jpg');  // Change l'image
+      setTextAnimClass('animate-text');
+    }, 50000);  // 25 secondes
+
+    // Le texte change à 30 secondes et change l'image
+    const timer3 = setTimeout(() => {
+      setModalText('Si tu aimais vraiment les pâtes tu leur ferais pas ça');
+      setImageSrc('/src/assets/images/final-image4.jpg');  // Change l'image
+      setTextAnimClass('animate-text');
+    }, 55000);  // 30 secondes
+
+    // Le texte change à 35 secondes et change l'image
+    const timer4 = setTimeout(() => {
+      setModalText('Si l\'Italie te voyait, elle pleurerait');
+      setImageSrc('/src/assets/images/final-image4.jpg');  // Change l'image
+      setTextAnimClass('animate-text');
+    }, 60000);  // 35 secondes
+    
+    // Nettoyer les timers à la fin
+    return () => {
+      clearTimeout(timer);
+      clearTimeout(timer1);
+      clearTimeout(timer2);
+      clearTimeout(timer3);
+      clearTimeout(timer4);
+    };
+  }, []);
 
 
   useEffect(() => {
@@ -44,8 +99,26 @@ const App = () => {
         setTimeLeft(timeLeft - 1);
       }, 1000);
       return () => clearTimeout(timer);
+    } else if (timeLeft === 0) {
+      // Jouer l'alarme quand le temps atteint 0
+      const alarm = new Audio(alarmSound);
+      alarm.loop = true; // Boucle le son jusqu'à l'arrêt
+      alarm.play();
+      setAlarmAudio(alarm);
     }
   }, [timeLeft]);
+
+
+  useEffect(() => {
+    const stopAlarmTimer = setTimeout(() => {
+      if (alarmAudio) {
+        alarmAudio.pause();
+        alarmAudio.currentTime = 0; // Remet le son au début
+      }
+    }, 40000); // Arrêter l'alarme après 40 secondes
+  
+    return () => clearTimeout(stopAlarmTimer);
+  }, [alarmAudio]);
   
 
   // Démarrer la cuisson, ouvrir le modal et afficher la recette
@@ -135,6 +208,7 @@ const App = () => {
         }
       }, 100); 
     }
+    setIsSearchOpen(false);
   };
 
 
@@ -232,8 +306,8 @@ const App = () => {
                   </motion.span>
                 ))}
               </motion.h1> */}
-              <h1>Choisis la catégorie 👇</h1>
-              {/* <h1>Pick your pasta category 👇</h1> */}
+              {/* <h1>Choisis la catégorie 👇</h1> */}
+              <h1>Pick your pasta category 👇</h1>
               <div className="buttons-step-one">
                 <div className="buttons-general">
                   {Object.keys(pastaData).map((cat) => (
@@ -273,7 +347,20 @@ const App = () => {
               <div className="steps-two-three">
                 {/* STEP TWO */}
                 <div className="step-two-title">
-                  <h2>Choisis ton type</h2>
+                  {/* <h2>Choisis ton type</h2> */}
+                  <h2
+                    onMouseEnter={() => setIsHovered(true)}
+                    onMouseLeave={() => setIsHovered(false)}
+                  >
+                    Choose your type
+                  </h2>
+
+                  {/* La div apparaît si isHovered est true */}
+                  {/* {isHovered && (
+                    <div className="step-two-title-hover-text">
+                      <p>Pâtes gangsta ou torsadées comme mon avenir</p>
+                    </div>
+                  )} */}
                   {/* <h2>Choose your type</h2> */}
                   <div className="step-icon">
                     <svg height="50px" width="50px" viewBox="0 0 496.158 496.158" xmlns="http://www.w3.org/2000/svg" fill="#D0EAFF">
@@ -317,8 +404,8 @@ const App = () => {
                   <div className="step-three">
                     {/* STEP THREE */}
                     <div className="step-three-title">
-                      <h2>Tu préfères...</h2>
-                      {/* <h2>How do u prefer it?</h2> */}
+                      {/* <h2>Tu préfères...</h2> */}
+                      <h2>How do u prefer it?</h2>
                       <div className="step-icon">
                         <svg
                           height="200px"
@@ -458,7 +545,25 @@ const App = () => {
                     onMouseDown={handleMouseDown}
                     onClick={() => setShowModal(false)}
                     >
-                      <h2 className="hearts">ENJOY ❤️</h2>
+                      <video
+                        className="modal-video"
+                        autoPlay
+                        muted
+                        loop
+                        playsInline
+                      >
+                        <source src="/src/assets/images/alert.MP4" type="video/mp4" />
+                        Votre navigateur ne supporte pas la lecture de vidéos.
+                      </video>
+                      {!videoVisible && (
+                        <img
+                          src={imageSrc}  // L'image change selon le texte
+                          alt="Final Image"
+                          className="modal-image"
+                        />
+                      )}
+                      <div className="hearts-container">
+                        <h2 className={`hearts ${textAnimClass}`}>{modalText}</h2>                      </div>
                     </div>
                   )}
                   {console.log(timeLeft)}
