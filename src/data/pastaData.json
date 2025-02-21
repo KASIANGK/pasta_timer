@@ -14,7 +14,6 @@
     ],
     "special": [
       { "name": "Ravioli", "alDente": 3, "wellDone": 5, "image": "/src/assets/images/farfalle.JPG", "image-bis": "/src/assets/images/pastaa-bis.JPG"},
-      { "name": "Gnocchi", "alDente": 2, "wellDone": 3, "image": "/src/assets/images/farfalle.JPG", "image-bis": "/src/assets/images/pastaa-bis.JPG"},
       { "name": "Pappardelle", "alDente": 6, "wellDone": 8, "image": "/src/assets/images/farfalle.JPG", "image-bis": "/src/assets/images/pastaa-bis.JPG"}
     ]
   }

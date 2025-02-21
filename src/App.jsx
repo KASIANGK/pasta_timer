@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import "./App.css";
 import pastaData from "/src/data/pastaData.json"; 
 import { motion } from "framer-motion";
+import CookingButtons from "./assets/Components/CookingButtons";
 
 const App = () => {
   const [category, setCategory] = useState(null);
@@ -30,7 +31,6 @@ const App = () => {
   const filteredPasta = allPasta.filter((pasta) =>
     pasta.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
-  const [isHovered, setIsHovered] = useState(false);
 
 
   useEffect(() => {
@@ -90,11 +90,11 @@ const App = () => {
   };
   
 
-  useEffect(() => {
-    if (timeLeft <= 0) {
-      console.log("Modal de fin affichée");
-    }
-  }, [timeLeft]);
+  // useEffect(() => {
+  //   if (timeLeft <= 0) {
+  //     console.log("Modal de fin affichée");
+  //   }
+  // }, [timeLeft]);
   
 
   const handlePastaSelection = (pasta) => {
@@ -155,6 +155,8 @@ const App = () => {
     };
   }, []);
 
+  console.log("selectedPasta dans App:", selectedPasta);
+
   
   return (
     <div className="pasta-timer">
@@ -211,7 +213,7 @@ const App = () => {
                 </div>
               </div>
               {/* ANIMATION SUR LE TITRE */}
-              <motion.h1
+              {/* <motion.h1
                 className="animated-title"
                 initial={{ opacity: 0, y: 50 }} // Apparition avec effet de montée
                 animate={{ opacity: 1, y: 0 }}
@@ -229,8 +231,8 @@ const App = () => {
                     {letter}
                   </motion.span>
                 ))}
-              </motion.h1>
-              {/* <h1>Choisis la catégorie 👇</h1> */}
+              </motion.h1> */}
+              <h1>Choisis la catégorie 👇</h1>
               {/* <h1>Pick your pasta category 👇</h1> */}
               <div className="buttons-step-one">
                 <div className="buttons-general">
@@ -255,7 +257,10 @@ const App = () => {
               </div>
             </div>
             <div className="step-one-illustration">
-              <video autoPlay muted playsInline>
+              <video
+                autoPlay
+                muted
+              >
                 <source src="/src/assets/images/Pasta_Timer2.MP4" type="video/mp4" />
                 Votre navigateur ne supporte pas la lecture de vidéos.
               </video>
@@ -268,7 +273,8 @@ const App = () => {
               <div className="steps-two-three">
                 {/* STEP TWO */}
                 <div className="step-two-title">
-                  <h2>Choose your type</h2>
+                  <h2>Choisis ton type</h2>
+                  {/* <h2>Choose your type</h2> */}
                   <div className="step-icon">
                     <svg height="50px" width="50px" viewBox="0 0 496.158 496.158" xmlns="http://www.w3.org/2000/svg" fill="#D0EAFF">
                       <path d="M248.082,0.003C111.07,0.003,0,111.061,0,248.085c0,137,111.07,248.07,248.082,248.07 c137.006,0,248.076-111.07,248.076-248.07C496.158,111.061,385.088,0.003,248.082,0.003z"></path> 
@@ -311,7 +317,8 @@ const App = () => {
                   <div className="step-three">
                     {/* STEP THREE */}
                     <div className="step-three-title">
-                      <h2>How do u prefer it?</h2>
+                      <h2>Tu préfères...</h2>
+                      {/* <h2>How do u prefer it?</h2> */}
                       <div className="step-icon">
                         <svg
                           height="200px"
@@ -353,53 +360,12 @@ const App = () => {
                     </div>
                     
                     {/* COOKING BUTTONS */}
-                    <div className="buttons-general buttons-cooking">
-                      <button onClick={() => {
-                        setSelectedCooking("alDente");
-                        startCooking(selectedPasta.alDente);
-                      }}
-                      className={selectedCooking === "alDente" ? "selected" : ""}
-                      >
-                        <span className="svg-wrapper">
-                          <svg
-                            fill="#00a3d7"
-                            width="24"
-                            height="24"
-                            viewBox="0 0 504.064 504.064"
-                            xmlns="http://www.w3.org/2000/svg"
-                            stroke="#00a3d7"
-                          >
-                            <g>
-                              <path d="M413.416,416.207h-0.914l-78.396-32.914h46.396c21.029,0,37.486-16.457,37.486-36.571v-8.229 c0-8.062-2.796-15.68-7.435-21.919c14.774-6.01,25.927-21.207,26.635-37.51v-5.486c0-13.182-7.462-24.793-18.781-31.23 c5.431-6.386,8.724-14.638,8.724-23.627v-8.229c0-21.029-16.457-37.486-36.571-37.486h-100.57c0,0-0.001,0-0.001,0h-55.771 l9.143-11.886c12.8-17.371,45.714-77.714,48.457-114.286c0.914-21.029-16.457-43.886-37.486-47.543 c-6.4-0.914-29.257-1.829-38.4,32.914c-8.229,32.914-44.8,84.114-71.314,106.057c-12.8,10.971-23.771,25.6-33.829,43.886H79.702 c-21.943,0-36.571,13.714-36.571,32.914v164.571c0,19.2,14.629,40.229,36.571,40.229h34.743 c37.486,28.343,42.057,28.343,117.943,28.343h10.971l153.6,49.371c5.486,1.828,15.543,5.486,25.6,5.486 c10.971,0,22.857-4.571,31.086-20.114C468.273,451.864,451.816,436.321,413.416,416.207z" />
-                            </g>
-                          </svg>
-                        </span>
-                        <span>Al Dente</span>
-                      </button>
-
-                      <button     onClick={() => {
-                          setSelectedCooking("wellDone");
-                          startCooking(selectedPasta.wellDone);
-                        }}
-                        className={selectedCooking === "wellDone" ? "selected" : ""}
-                      >
-                        <span className="svg-wrapper">
-                          <svg
-                            fill="#00a3d7"
-                            width="24"
-                            height="24"
-                            viewBox="0 0 504.064 504.064"
-                            xmlns="http://www.w3.org/2000/svg"
-                            stroke="#00a3d7"
-                          >
-                            <g>
-                              <path d="M413.416,416.207h-0.914l-78.396-32.914h46.396c21.029,0,37.486-16.457,37.486-36.571v-8.229 c0-8.062-2.796-15.68-7.435-21.919c14.774-6.01,25.927-21.207,26.635-37.51v-5.486c0-13.182-7.462-24.793-18.781-31.23 c5.431-6.386,8.724-14.638,8.724-23.627v-8.229c0-21.029-16.457-37.486-36.571-37.486h-100.57c0,0-0.001,0-0.001,0h-55.771 l9.143-11.886c12.8-17.371,45.714-77.714,48.457-114.286c0.914-21.029-16.457-43.886-37.486-47.543 c-6.4-0.914-29.257-1.829-38.4,32.914c-8.229,32.914-44.8,84.114-71.314,106.057c-12.8,10.971-23.771,25.6-33.829,43.886H79.702 c-21.943,0-36.571,13.714-36.571,32.914v164.571c0,19.2,14.629,40.229,36.571,40.229h34.743 c37.486,28.343,42.057,28.343,117.943,28.343h10.971l153.6,49.371c5.486,1.828,15.543,5.486,25.6,5.486 c10.971,0,22.857-4.571,31.086-20.114C468.273,451.864,451.816,436.321,413.416,416.207z" />
-                            </g>
-                          </svg>
-                        </span>
-                        <span>Well Done</span>
-                      </button>
-                    </div>
+                    <CookingButtons 
+                      selectedPasta={selectedPasta} 
+                      startCooking={startCooking} 
+                      setSelectedCooking={setSelectedCooking} 
+                      selectedCooking={selectedCooking}
+                    />
                   </div>
                 )}
 
