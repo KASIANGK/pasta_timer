@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useRef } from "react";
 import "./App.css";
 import pastaData from "/src/data/pastaData.json"; 
-import { motion } from "framer-motion";
+// import { motion } from "framer-motion";
 import CookingButtons from "./assets/Components/CookingButtons";
-import alarmSound from "./assets/images/alert.mp3"
+import alarmSound from "/images/alert.mp3"
 
 const App = () => {
   const [category, setCategory] = useState(null);
@@ -35,9 +35,9 @@ const App = () => {
   const [videoVisible, setVideoVisible] = useState(true);
   const [modalText, setModalText] = useState('ENJOY ❤️');
   const [textAnimClass, setTextAnimClass] = useState('');
-  const [imageSrc, setImageSrc] = useState('/src/assets/images/final-image.jpg'); 
-  const [isHovered, setIsHovered] = useState(false);
-  const [alarmAudio, setAlarmAudio] = useState(null);
+  const [imageSrc, setImageSrc] = useState('/images/final-image.jpg'); 
+  const [isHovered, setIsHovered] = useState(false)
+  const [alarmAudio, setAlarmAudio] = useState(null)
 
 
   useEffect(() => {
@@ -231,7 +231,7 @@ const App = () => {
 
   console.log("selectedPasta dans App:", selectedPasta);
 
-  
+
   return (
     <div className="pasta-timer">
       <div className="main-container">
@@ -335,7 +335,7 @@ const App = () => {
                 autoPlay
                 muted
               >
-                <source src="/src/assets/images/Pasta_Timer2.MP4" type="video/mp4" />
+                <source src="/images/Pasta_Timer2.MP4" type="video/mp4" />
                 Votre navigateur ne supporte pas la lecture de vidéos.
               </video>
             </div>
@@ -552,7 +552,7 @@ const App = () => {
                         loop
                         playsInline
                       >
-                        <source src="/src/assets/images/alert.MP4" type="video/mp4" />
+                        <source src="/images/alert.MP4" type="video/mp4" />
                         Votre navigateur ne supporte pas la lecture de vidéos.
                       </video>
                       {!videoVisible && (

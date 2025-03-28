@@ -1,20 +1,20 @@
 {
     "short": [
-      { "name": "Cornetti", "alDente": 7, "wellDone": 9, "image": "/src/assets/images/cornetti.jpg", "image-bis": "/src/assets/images/cornetti2.jpg"},
-      { "name": "Gnocchi", "alDente": 9, "wellDone": 11, "image": "/src/assets/images/gnocchi.jpg", "image-bis": "/src/assets/images/gnocchi2.jpg"},
-      { "name": "Farfalle", "alDente": 9, "wellDone": 11, "image": "/src/assets/images/farfalle.jpg", "image-bis": "/src/assets/images/farfalle2.jpg"},
-      { "name": "Fusilli", "alDente": 8, "wellDone": 10, "image": "/src/assets/images/fusilli.jpg", "image-bis": "/src/assets/images/fusilli2.jpg"},
-      { "name": "Penne", "alDente": 7, "wellDone": 9, "image": "/src/assets/images/penne.jpg", "image-bis": "/src/assets/images/penne2.jpg"}    
+      { "name": "Cornetti", "alDente": 7, "wellDone": 9, "image": "/images/cornetti.jpg", "image-bis": "/images/cornetti2.jpg"},
+      { "name": "Gnocchi", "alDente": 9, "wellDone": 11, "image": "/images/gnocchi.jpg", "image-bis": "/images/gnocchi2.jpg"},
+      { "name": "Farfalle", "alDente": 9, "wellDone": 11, "image": "/images/farfalle.jpg", "image-bis": "/images/farfalle2.jpg"},
+      { "name": "Fusilli", "alDente": 8, "wellDone": 10, "image": "/images/fusilli.jpg", "image-bis": "/images/fusilli2.jpg"},
+      { "name": "Penne", "alDente": 7, "wellDone": 9, "image": "/images/penne.jpg", "image-bis": "/images/penne2.jpg"}    
     ],
     "long": [
-      { "name": "Spaghetti", "alDente": 0.05, "wellDone": 10, "image": "/src/assets/images/spag.jpg", "image-bis": "/src/assets/images/spag2.jpg"},
-      { "name": "Linguine", "alDente": 9, "wellDone": 11, "image": "/src/assets/images/spag.jpg", "image-bis": "/src/assets/images/spag2.jpg"},
-      { "name": "Tagliatelle", "alDente": 7, "wellDone": 9, "image": "/src/assets/images/farfalle.JPG", "image-bis": "/src/assets/images/spag2.jpg"},
-      { "name": "Fettuccine", "alDente": 9, "wellDone": 11, "image": "/src/assets/images/fettuccine.jpg", "image-bis": "/src/assets/images/fettuccine2.jpg"}
+      { "name": "Spaghetti", "alDente": 0.05, "wellDone": 10, "image": "/images/spag.jpg", "image-bis": "/images/spag2.jpg"},
+      { "name": "Linguine", "alDente": 9, "wellDone": 11, "image": "/images/spag.jpg", "image-bis": "/images/spag2.jpg"},
+      { "name": "Tagliatelle", "alDente": 7, "wellDone": 9, "image": "/images/farfalle.JPG", "image-bis": "/images/spag2.jpg"},
+      { "name": "Fettuccine", "alDente": 9, "wellDone": 11, "image": "/images/fettuccine.jpg", "image-bis": "/images/fettuccine2.jpg"}
     ],
     "special": [
-      { "name": "Ravioli", "alDente": 3, "wellDone": 5, "image": "/src/assets/images/farfalle.JPG", "image-bis": "/src/assets/images/pastaa-bis.JPG"},
-      { "name": "Pappardelle", "alDente": 6, "wellDone": 8, "image": "/src/assets/images/farfalle.JPG", "image-bis": "/src/assets/images/pastaa-bis.JPG"}
+      { "name": "Ravioli", "alDente": 3, "wellDone": 5, "image": "/images/farfalle.JPG", "image-bis": "/images/pastaa-bis.JPG"},
+      { "name": "Pappardelle", "alDente": 6, "wellDone": 8, "image": "/images/farfalle.JPG", "image-bis": "/images/pastaa-bis.JPG"}
     ]
   }
   
