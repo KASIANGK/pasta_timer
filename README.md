@@ -17,20 +17,31 @@ Whether you prefer your pasta Al Dente or Well Done, this interactive timer will
 
 ✅ Fun & Responsive Design – Works on both desktop and mobile devices 
 
+
 🛠️ Tech Stack
 
+
 🔹 React.js – For a dynamic and interactive experience
+
 🔹 CSS & GSAP – Smooth animations and transitions
+
 🔹 JSON Data – Preloaded pasta information for quick access
+
 
 🚀 How to Use
 
+
 1️⃣ Select your pasta category (Short, Long, or Special)
+
 2️⃣ Choose your favorite pasta type 
+
 3️⃣ Pick your cooking preference (Al Dente or Well Done)
+
 4️⃣ Let the timer guide you to pasta perfection! 
 
+
 💡 Why Pasta Timer?
+
 
 Because no one likes overcooked or undercooked pasta! 
 With Pasta Timer, your spaghetti, penne, or ravioli will always be just right. 
