@@ -5,11 +5,11 @@ Whether you prefer your pasta Al Dente or Well Done, this interactive timer will
 
 🎯 Features
 
-✅ Select Your Pasta Type – Choose from a variety of pasta shapes (short, long, special) 🍜
-✅ Precise Cooking Timer – Get the perfect cooking time for Al Dente or Well Done pasta ⏱️
-✅ Intuitive UI – A smooth and interactive interface with hover effects and a sliding selection 🎨
-✅ Live Countdown – Watch your cooking time tick down in real time! ⏳
-✅ Fun & Responsive Design – Works on both desktop and mobile devices 📱💻
+✅ Select Your Pasta Type – Choose from a variety of pasta shapes (short, long, special) 
+✅ Precise Cooking Timer – Get the perfect cooking time for Al Dente or Well Done pasta 
+✅ Intuitive UI – A smooth and interactive interface with hover effects and a sliding selection 
+✅ Live Countdown – Watch your cooking time tick down in real time! 
+✅ Fun & Responsive Design – Works on both desktop and mobile devices 
 
 🛠️ Tech Stack
 
@@ -20,16 +20,13 @@ Whether you prefer your pasta Al Dente or Well Done, this interactive timer will
 🚀 How to Use
 
 1️⃣ Select your pasta category (Short, Long, or Special)
-2️⃣ Choose your favorite pasta type 🏷️
+2️⃣ Choose your favorite pasta type 
 3️⃣ Pick your cooking preference (Al Dente or Well Done)
-4️⃣ Let the timer guide you to pasta perfection! 🎉
-
-📸 Preview
-
+4️⃣ Let the timer guide you to pasta perfection! 
 
 💡 Why Pasta Timer?
 
 Because no one likes overcooked or undercooked pasta! 
-With Pasta Timer, your spaghetti, penne, or ravioli will always be just right. 🍽️
+With Pasta Timer, your spaghetti, penne, or ravioli will always be just right. 
 
 👉 Try it out & never ruin your pasta again!
