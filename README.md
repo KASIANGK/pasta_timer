@@ -1,6 +1,7 @@
 🍝 Pasta Timer – The Ultimate Pasta Cooking Companion ⏳
 
-Pasta Timer is a simple yet elegant web app designed to help you cook your pasta to perfection! Whether you prefer your pasta Al Dente or Well Done, this interactive timer will guide you through the process effortlessly.
+Pasta Timer is a simple yet elegant web app designed to help you cook your pasta to perfection! 
+Whether you prefer your pasta Al Dente or Well Done, this interactive timer will guide you through the process effortlessly.
 
 🎯 Features
 
@@ -28,6 +29,7 @@ Pasta Timer is a simple yet elegant web app designed to help you cook your pasta
 
 💡 Why Pasta Timer?
 
-Because no one likes overcooked or undercooked pasta! With Pasta Timer, your spaghetti, penne, or ravioli will always be just right. 🍽️
+Because no one likes overcooked or undercooked pasta! 
+With Pasta Timer, your spaghetti, penne, or ravioli will always be just right. 🍽️
 
 👉 Try it out & never ruin your pasta again!
