@@ -3,12 +3,18 @@
 Pasta Timer is a simple yet elegant web app designed to help you cook your pasta to perfection! 
 Whether you prefer your pasta Al Dente or Well Done, this interactive timer will guide you through the process effortlessly.
 
+
 🎯 Features
 
+
 ✅ Select Your Pasta Type – Choose from a variety of pasta shapes (short, long, special) 
+
 ✅ Precise Cooking Timer – Get the perfect cooking time for Al Dente or Well Done pasta 
+
 ✅ Intuitive UI – A smooth and interactive interface with hover effects and a sliding selection 
+
 ✅ Live Countdown – Watch your cooking time tick down in real time! 
+
 ✅ Fun & Responsive Design – Works on both desktop and mobile devices 
 
 🛠️ Tech Stack
